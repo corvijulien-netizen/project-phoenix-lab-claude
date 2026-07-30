@@ -1165,6 +1165,64 @@ main{margin-left:var(--rail-w);padding:38px 40px 40px;max-width:1680px}
 }
 .btn:hover{transform:translateY(-2px);box-shadow:inset 0 1px rgba(255,255,255,.16),0 11px 24px rgba(122,50,17,.28)}
 
+/* ── composition du tracé ─────────────────────────────────────────────────
+   Quatre segments enchaînés, dont un sans équivalent historique. Celui-là est
+   marqué d'une trame et d'une mention « estimé » : la nuance se voit.
+   ───────────────────────────────────────────────────────────────────────── */
+.legs{margin-top:18px}
+.legs h3{
+  font-family:var(--sans);font-size:10.5px;font-weight:600;
+  letter-spacing:.17em;text-transform:uppercase;color:var(--ink-faint);
+  margin-bottom:11px;
+}
+.legs ol{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;
+}
+.leg{
+  padding:13px 15px;border-radius:9px;
+  border:1px solid var(--rule-soft);
+  background:rgba(255,252,245,.55);
+  border-left:3px solid var(--rule);
+}
+.leg-range{
+  display:block;font-size:9.5px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-faint);
+  font-variant-numeric:tabular-nums;
+}
+.leg strong{
+  display:block;font-family:var(--serif);font-size:18px;font-weight:600;
+  margin:2px 0 1px;
+}
+.leg strong em{
+  font-family:var(--sans);font-size:9px;font-weight:600;font-style:normal;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ochre);
+  vertical-align:middle;margin-left:5px;
+  padding:2px 6px;border-radius:99px;border:1px solid rgba(168,117,44,.42);
+}
+.leg-ends{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:6px}
+.leg p{font-size:11.5px;line-height:1.5;color:var(--ink-soft)}
+
+.leg.is-done{border-left-color:var(--terracotta)}
+.leg.is-here{
+  border-left-color:var(--terracotta);
+  background:rgba(255,252,245,.95);
+  box-shadow:var(--lift);
+}
+.leg.is-estimated{
+  border-left-style:dashed;border-left-color:var(--ochre);
+  background:repeating-linear-gradient(45deg,
+    rgba(168,117,44,.04) 0 4px,transparent 4px 11px),rgba(255,252,245,.5);
+}
+
+.sheet-region{
+  font-size:12px;color:var(--terracotta);letter-spacing:.04em;margin-bottom:14px;
+}
+.sheet-body > p:not(.overline):not(.lead):not(.sheet-note):not(.sheet-region){
+  font-family:var(--serif);font-size:16px;line-height:1.65;color:var(--ink-soft);
+  margin-top:16px;
+}
+
 /* ══ crédential — carnet accordéon ═══════════════════════════════════════
    Un leporello : une bande de papier pliée en accordéon qui se déplie vers la
    droite. Les plis sont rendus par un dégradé alterné et un trait de rainure,
@@ -1622,6 +1680,13 @@ body{margin:0}
         <button class="btn" type="button" data-open="dlg-stage">Découvrir l’étape</button>
       </article>
     </div>
+
+    <!-- Il n'existe pas de « chemin officiel Rome → Santiago ». Le tracé
+         enchaîne trois itinéraires réels et un maillon estimé : autant le dire. -->
+    <section class="legs" aria-labelledby="legs-title">
+      <h3 id="legs-title">Un tracé composé</h3>
+      <ol data-legs></ol>
+    </section>
   </section>
 
   <!-- ── le crédential, second protagoniste ──────────────────────────────── -->
@@ -1664,19 +1729,7 @@ body{margin:0}
 <!-- ══ fenêtre : l'étape ═══════════════════════════════════════════════════ -->
 <dialog id="dlg-stage" class="sheet">
   <button class="sheet-close" type="button" data-close aria-label="Fermer">×</button>
-  <div class="sheet-body">
-    <p class="overline">Sur la Via Francigena</p>
-    <h2><span data-stage-name>—</span></h2>
-    <p class="lead">
-      Les premiers kilomètres quittent Rome par la via Cassia. La ville se retire
-      lentement derrière les pins, et le chemin s’ouvre sur les collines du Latium.
-    </p>
-    <blockquote>« Le vrai voyage commence au premier pas que l’on décide de compter. »</blockquote>
-    <p class="sheet-note" data-demo-only>
-      Le récit détaillé de chaque étape s’écrira au fil du chemin. Les étapes non
-      documentées restent vierges plutôt que remplies automatiquement.
-    </p>
-  </div>
+  <div class="sheet-body" data-sheet-body></div>
 </dialog>
 
 <script>/* @preserve
@@ -1836,17 +1889,84 @@ window.CAMINO_DATA = (() => {
     geodesicKm += d;
   }
 
-  // Facteur de sinuosité : ramène le tracé géodésique à la distance réellement
-  // marchée. Calculé, non deviné — il découle des deux valeurs ci-dessus.
-  const SINUOSITY = TOTAL_KM / geodesicKm;
+  /* --------------------------------------------------------------------------
+     CALAGE SUR DISTANCES DE RÉFÉRENCE
 
-  // Distance de marche cumulée à chaque ville-étape.
-  let running = 0;
+     Un facteur de sinuosité unique appliqué à tout le tracé est faux : il
+     étire de la même façon une côte rectiligne et un franchissement de col.
+     Mesuré contre les références, il plaçait Sutri à 78 km au lieu de 45, et
+     allongeait le Camino Francés de 780 à 961 km — jusqu'à +39 % d'erreur.
+
+     On cale donc le tracé sur des distances réellement relevées par les guides
+     de pèlerins, et on interpole proportionnellement entre ces points d'ancrage.
+
+     ATTENTION : ces valeurs sont des approximations couramment citées, qui
+     varient de ±5 à 10 % selon les sources et les variantes de chemin. Elles ne
+     remplacent pas un tracé GPX. Elles sont bien meilleures qu'un facteur
+     uniforme, elles ne sont pas des mesures au mètre.
+     -------------------------------------------------------------------------- */
+
+  const idx = (name) => route.findIndex((s) => s.name === name);
+  const geoBetween = (a, b) => {
+    let sum = 0;
+    for (let i = a + 1; i <= b; i += 1) sum += segments[i - 1];
+    return sum;
+  };
+
+  // Segment 1 — Via Francigena italienne, cumul depuis Rome.
+  const anchors = [
+    ["Rome", 0], ["La Storta", 19], ["Sutri", 45], ["Viterbe", 92],
+    ["Bolsena", 140], ["Acquapendente", 150], ["Sienne", 260], ["Lucques", 419]
+  ];
+
+  /* Connecteur ligure Lucques → Arles. C'est le maillon faible du tracé : il
+     n'existe aucun itinéraire de pèlerinage documenté entre la Toscane et la
+     Provence. On suit ici l'ancienne Via Aurelia le long de la côte, et on
+     estime sa longueur à partir de sa propre géométrie plutôt que de la
+     deviner — les routes côtières serpentent peu, d'où un facteur modeste. */
+  const COASTAL_WINDING = 1.25;
+  const connector = geoBetween(idx("Lucques"), idx("Arles")) * COASTAL_WINDING;
+  const arlesKm = 419 + connector;
+
+  // Segment 2 — Via Tolosana, cumul depuis Arles.
+  [["Arles", 0], ["Saint-Gilles", 20.5], ["Montpellier", 135],
+   ["Toulouse", 463], ["Auch", 530], ["Saint-Jean-Pied-de-Port", 700]
+  ].forEach(([n, km]) => anchors.push([n, arlesKm + km]));
+
+  const sjppKm = arlesKm + 700;
+
+  // Segment 3 — Camino Francés, cumul depuis Saint-Jean-Pied-de-Port.
+  [["Roncevaux", 25], ["Pampelune", 69], ["Puente la Reina", 92],
+   ["Logroño", 160], ["Santo Domingo", 200], ["Burgos", 280],
+   ["Frómista", 340], ["León", 430], ["Astorga", 485], ["Ponferrada", 525],
+   ["O Cebreiro", 560], ["Sarria", 665], ["Santiago", 780]
+  ].forEach(([n, km]) => anchors.push([n, sjppKm + km]));
+
+  // Interpolation entre ancres, au prorata des distances à vol d'oiseau.
+  const pinned = anchors
+    .map(([name, km]) => ({ i: idx(name), km }))
+    .filter((a) => a.i >= 0)
+    .sort((a, b) => a.i - b.i);
+
   route[0].km = 0;
-  for (let i = 1; i < route.length; i += 1) {
-    running += segments[i - 1];
-    route[i].km = running * SINUOSITY;
+  for (let a = 0; a < pinned.length - 1; a += 1) {
+    const from = pinned[a], to = pinned[a + 1];
+    const span = to.km - from.km;
+    const geoSpan = geoBetween(from.i, to.i) || 1;
+    let walked = 0;
+    for (let i = from.i + 1; i <= to.i; i += 1) {
+      walked += segments[i - 1];
+      route[i].km = from.km + span * (walked / geoSpan);
+    }
   }
+
+  // Le chemin réel ainsi reconstitué mesure moins de 3 000 km. Julien a fixé
+  // 3 000 comme objectif — c'est aussi ce qui donne exactement 60 tampons de
+  // 50 km. On conserve donc ce cap symbolique et on met le tracé à son échelle :
+  // les positions relatives restent fidèles, seule l'unité change.
+  const realKm = route[route.length - 1].km;
+  const SCALE = TOTAL_KM / realKm;
+  route.forEach((s) => { s.km *= SCALE; });
 
   /* ---- interpolation ------------------------------------------------------ */
 
@@ -1856,27 +1976,26 @@ window.CAMINO_DATA = (() => {
    */
   function locate(km) {
     const clamped = Math.max(0, Math.min(TOTAL_KM, km));
-    const target = clamped / SINUOSITY;   // retour en distance géodésique
 
     if (clamped <= 0) {
       return { coords: route[0].coords.slice(), from: route[0], to: route[1], ratioInLeg: 0 };
     }
 
-    let travelled = 0;
-    for (let i = 0; i < segments.length; i += 1) {
-      const next = travelled + segments[i];
-      if (next >= target) {
-        const r = segments[i] === 0 ? 0 : (target - travelled) / segments[i];
-        const a = route[i].coords;
-        const b = route[i + 1].coords;
+    // Chaque ville porte désormais sa distance de marche calée : on interpole
+    // directement entre deux villes, sans repasser par le vol d'oiseau.
+    for (let i = 1; i < route.length; i += 1) {
+      if (route[i].km >= clamped) {
+        const a = route[i - 1], b = route[i];
+        const span = b.km - a.km;
+        const r = span === 0 ? 0 : (clamped - a.km) / span;
         return {
-          coords: [a[0] + (b[0] - a[0]) * r, a[1] + (b[1] - a[1]) * r],
-          from: route[i],
-          to: route[i + 1],
-          ratioInLeg: r
+          coords: [
+            a.coords[0] + (b.coords[0] - a.coords[0]) * r,
+            a.coords[1] + (b.coords[1] - a.coords[1]) * r
+          ],
+          from: a, to: b, ratioInLeg: r
         };
       }
-      travelled = next;
     }
 
     const last = route[route.length - 1];
@@ -1963,15 +2082,95 @@ window.CAMINO_DATA = (() => {
             "Le bitume cède la place aux chemins de terre, et le paysage du Latium " +
             "s’ouvre sur des collines, des cyprès et des fermes de tuf.",
       quote: "Le vrai voyage commence au premier pas que l’on décide de compter."
+    },
+
+    "Sienne": {
+      region: "Toscane · Italie",
+      lead: "Le chemin traverse les crêtes des Crete Senesi avant de découvrir " +
+            "la ville depuis les collines.",
+      body: "Au Xᵉ siècle, l’archevêque Sigeric de Canterbury notait ses étapes " +
+            "sur le retour de Rome. Son carnet de route est devenu la référence " +
+            "historique de la Via Francigena : soixante-dix-neuf jours de marche, " +
+            "une vingtaine de kilomètres par jour."
+    },
+
+    "Lucques": {
+      region: "Toscane · Italie",
+      lead: "Fin de la section italienne la mieux documentée du chemin.",
+      body: "Au-delà, aucun itinéraire de pèlerinage ne relie la Toscane à la " +
+            "Provence : la Via Francigena, elle, remonte vers la Suisse. Le tracé " +
+            "suit alors la côte ligure par l’ancienne Via Aurelia — un raccourci " +
+            "assumé, pas un chemin balisé."
+    },
+
+    "Arles": {
+      region: "Provence · France",
+      lead: "Départ de la Via Tolosana, le plus méridional des quatre chemins " +
+            "français vers Compostelle.",
+      body: "Via Podiensis, Via Lemovicensis, Via Turonensis, Via Tolosana : les " +
+            "quatre grands itinéraires français ont été classés au patrimoine " +
+            "mondial de l’UNESCO en 1998."
+    },
+
+    "Saint-Jean-Pied-de-Port": {
+      region: "Pays basque · France",
+      lead: "La porte de Compostelle : ici commence le Camino Francés.",
+      body: "Sept cent quatre-vingts kilomètres jusqu’à Santiago, trente à " +
+            "trente-cinq jours de marche, et le chemin le mieux balisé des quatre. " +
+            "Demain, la montée vers le col de Roncevaux."
+    },
+
+    "O Cebreiro": {
+      region: "Galice · Espagne",
+      lead: "Le seuil de la Galice, à mille trois cents mètres, souvent dans la brume.",
+      body: "C’est ici que Don Elías Valiña Sampedro, curé du village, a peint en " +
+            "1984 les premières flèches jaunes du Camino. Elles sont aujourd’hui " +
+            "indissociables de la coquille, et elles ont fait renaître le chemin."
+    },
+
+    "Sarria": {
+      region: "Galice · Espagne",
+      lead: "Début des cent derniers kilomètres.",
+      body: "Sur cette dernière portion, les vrais pèlerins doivent faire tamponner " +
+            "leur crédential deux fois par jour pour obtenir la Compostela. " +
+            "Beaucoup partent d’ici : c’est la distance minimale reconnue."
+    },
+
+    "Santiago": {
+      region: "Galice · Espagne",
+      lead: "Le terme du chemin, après trois mille kilomètres.",
+      body: "La légende raconte que le corps de l’apôtre Jacques, perdu en mer, " +
+            "s’échoua sur la côte galicienne recouvert de coquilles Saint-Jacques. " +
+            "Les rainures de la coquille figurent les chemins venus de toute " +
+            "l’Europe — tous convergeant vers un seul point.",
+      quote: "Toutes les lignes de la coquille se rejoignent au même endroit."
     }
   };
 
+  /* Les trois itinéraires réels que le tracé enchaîne. Il n'existe pas de
+     « chemin officiel Rome → Santiago » : c'est une composition, et le site
+     doit le dire plutôt que de la présenter comme un chemin historique unique. */
+  const legs = [
+    { name: "Via Francigena",  from: "Rome",  to: "Lucques",
+      note: "Section italienne du chemin de Canterbury à Rome, parcourue vers le nord." },
+    { name: "Côte ligure",     from: "Lucques", to: "Arles", estimated: true,
+      note: "Aucun itinéraire de pèlerinage ne relie la Toscane à la Provence. " +
+            "Ce maillon suit l’ancienne Via Aurelia : c’est un raccourci narratif, " +
+            "pas un chemin balisé." },
+    { name: "Via Tolosana",    from: "Arles", to: "Saint-Jean-Pied-de-Port",
+      note: "Le plus méridional des quatre chemins français, classés à l’UNESCO en 1998." },
+    { name: "Camino Francés",  from: "Saint-Jean-Pied-de-Port", to: "Santiago",
+      note: "Le chemin le plus emprunté et le mieux balisé des quatre." }
+  ];
+
   return {
-    route, stories,
+    route, stories, legs,
     totalKm: TOTAL_KM,
     stampEveryKm: STAMP_EVERY,
     stampCount: STAMP_COUNT,
-    geodesicKm, sinuosity: SINUOSITY,
+    geodesicKm,
+    realKm,            // longueur du chemin reconstitué avant mise à l'échelle
+    scale: SCALE,      // facteur appliqué pour atteindre l'objectif symbolique
     haversineKm, locate, placeAt, buildStamps
   };
 })();
@@ -2417,6 +2616,31 @@ window.CaminoMap = (() => {
     }
   }
 
+  /* ---- composition du tracé --------------------------------------------------
+     Le chemin enchaîne trois itinéraires réels et un maillon sans équivalent
+     historique. Le site l'annonce au lieu de laisser croire à un chemin unique.
+     ---------------------------------------------------------------------------- */
+
+  function renderLegs() {
+    const host = $("[data-legs]");
+    if (!host || !D.legs) return;
+
+    const kmOf = (name) => (D.route.find((s) => s.name === name) || {}).km ?? 0;
+
+    host.innerHTML = D.legs.map((leg) => {
+      const from = kmOf(leg.from), to = kmOf(leg.to);
+      const done = km >= to;
+      const here = km > from && km < to;
+      return `
+        <li class="leg${leg.estimated ? " is-estimated" : ""}${done ? " is-done" : ""}${here ? " is-here" : ""}">
+          <span class="leg-range">${nf(from, 0)} — ${nf(to, 0)} km</span>
+          <strong>${leg.name}${leg.estimated ? ' <em>estimé</em>' : ""}</strong>
+          <span class="leg-ends">${leg.from} → ${leg.to}</span>
+          <p>${leg.note}</p>
+        </li>`;
+    }).join("");
+  }
+
   /* ---- compagnons de route -------------------------------------------------- */
 
   function renderCompagnons() {
@@ -2625,6 +2849,48 @@ window.CaminoMap = (() => {
     });
   }
 
+  /* ---- fiche d'étape détaillée ------------------------------------------------
+     Le contenu vient des données, jamais du HTML : une étape sans récit affiche
+     un état d'attente au lieu du texte d'une autre étape.
+     ------------------------------------------------------------------------------ */
+
+  function renderSheet() {
+    const host = $("[data-sheet-body]");
+    if (!host) return;
+
+    const name = nearing.name;
+    const story = D.stories[name] || null;
+    const leg = (D.legs || []).find((l) => {
+      const to = (D.route.find((s) => s.name === l.to) || {}).km ?? 0;
+      return nearing.km <= to;
+    });
+
+    if (!story) {
+      host.innerHTML = `
+        <p class="overline">${leg ? leg.name : "Sur le chemin"}</p>
+        <h2>${name}</h2>
+        <p class="lead">Cette étape n’a pas encore de récit.</p>
+        <p class="sheet-note">
+          Les fiches s’écrivent au fil du chemin. Une étape non documentée reste
+          vierge — elle n’emprunte pas le texte d’une autre.
+        </p>`;
+      return;
+    }
+
+    host.innerHTML = `
+      <p class="overline">${leg ? leg.name : "Sur le chemin"}</p>
+      <h2>${name}</h2>
+      ${story.region ? `<p class="sheet-region">${story.region}</p>` : ""}
+      ${story.lead ? `<p class="lead">${story.lead}</p>` : ""}
+      ${story.body ? `<p>${story.body}</p>` : ""}
+      ${story.quote ? `<blockquote>« ${story.quote} »</blockquote>` : ""}
+      ${S.mode === "demo"
+        ? `<p class="sheet-note" data-demo-only>Distances calées sur les guides de
+           pèlerins : approximations à ±5 à 10 % selon les sources, en attente d’un
+           tracé GPX précis.</p>`
+        : ""}`;
+  }
+
   /* ---- fenêtres -------------------------------------------------------------- */
 
   function wireDialogs() {
@@ -2682,8 +2948,10 @@ window.CaminoMap = (() => {
 
   renderMode();
   renderHeader();
+  renderLegs();
   renderCompagnons();
   renderCredential();
+  renderSheet();
   renderTransformation();
   renderMap();
   wireDialogs();

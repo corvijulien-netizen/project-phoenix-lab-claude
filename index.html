@@ -131,6 +131,13 @@
         <button class="btn" type="button" data-open="dlg-stage">Découvrir l’étape</button>
       </article>
     </div>
+
+    <!-- Il n'existe pas de « chemin officiel Rome → Santiago ». Le tracé
+         enchaîne trois itinéraires réels et un maillon estimé : autant le dire. -->
+    <section class="legs" aria-labelledby="legs-title">
+      <h3 id="legs-title">Un tracé composé</h3>
+      <ol data-legs></ol>
+    </section>
   </section>
 
   <!-- ── le crédential, second protagoniste ──────────────────────────────── -->
@@ -173,19 +180,7 @@
 <!-- ══ fenêtre : l'étape ═══════════════════════════════════════════════════ -->
 <dialog id="dlg-stage" class="sheet">
   <button class="sheet-close" type="button" data-close aria-label="Fermer">×</button>
-  <div class="sheet-body">
-    <p class="overline">Sur la Via Francigena</p>
-    <h2><span data-stage-name>—</span></h2>
-    <p class="lead">
-      Les premiers kilomètres quittent Rome par la via Cassia. La ville se retire
-      lentement derrière les pins, et le chemin s’ouvre sur les collines du Latium.
-    </p>
-    <blockquote>« Le vrai voyage commence au premier pas que l’on décide de compter. »</blockquote>
-    <p class="sheet-note" data-demo-only>
-      Le récit détaillé de chaque étape s’écrira au fil du chemin. Les étapes non
-      documentées restent vierges plutôt que remplies automatiquement.
-    </p>
-  </div>
+  <div class="sheet-body" data-sheet-body></div>
 </dialog>
 
 <script src="assets/js/vendor/leaflet.js"></script>

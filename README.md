@@ -96,21 +96,59 @@ Non négociables, elles sont vérifiées à chaque modification :
 
 ## Comment la position est calculée
 
-Le tracé compte 89 villes réelles, de Rome à Santiago. La somme des segments à
-vol d'oiseau entre elles vaut environ 2 050 km, alors qu'un pèlerin qui marche
-vraiment en parcourt environ 3 000 : un chemin serpente, monte et contourne.
+Le tracé compte 89 villes réelles, de Rome à Santiago.
 
-Le rapport entre les deux (~1,46) est appliqué comme **facteur de sinuosité**.
-Il est calculé, pas deviné — il découle directement des deux longueurs. C'est
-une approximation, et le site l'annonce comme telle : « ≈ 3 000 km selon le
-tracé ».
+Les distances ne sont **pas** déduites du vol d'oiseau. Elles sont **calées sur
+une vingtaine de distances de référence** relevées par les guides et offices de
+pèlerins (Sutri à 45 km, Viterbe à 92, Sienne à 260, Lucques à 419, Burgos à
+280 depuis Saint-Jean, Santiago à 780…). Entre deux points d'ancrage, les
+villes intermédiaires sont réparties au prorata.
 
-Le jour où un vrai fichier GPX sera disponible, il remplacera ce calcul sans
-rien changer au reste du code.
+Une approche plus simple — un facteur de sinuosité unique appliqué à tout le
+tracé — a été essayée puis **abandonnée** : elle étirait de la même façon une
+côte rectiligne et un franchissement de col, et se trompait jusqu'à **+39 %**
+sur le Camino Francés. Le calage par ancres tombe juste sur chaque référence.
+
+> **Ces distances restent des approximations.** Les guides varient de ±5 à 10 %
+> selon les sources et les variantes. Elles ne remplacent pas un tracé GPX, et
+> ne doivent pas être traitées comme des mesures au mètre.
+
+### Un tracé composé, pas un chemin historique
+
+Il n'existe pas de « chemin officiel Rome → Santiago ». Le tracé enchaîne :
+
+| Segment | Statut |
+| --- | --- |
+| **Via Francigena** — Rome → Lucques | itinéraire réel, section la mieux documentée |
+| **Côte ligure** — Lucques → Arles | **estimé** — aucun chemin de pèlerinage ne relie la Toscane à la Provence ; suit l'ancienne Via Aurelia |
+| **Via Tolosana** — Arles → Saint-Jean-Pied-de-Port | itinéraire réel, classé UNESCO en 1998 |
+| **Camino Francés** — Saint-Jean → Santiago | itinéraire réel, le mieux balisé |
+
+Le site l'affiche tel quel, dans la bande « Un tracé composé » sous la carte, et
+marque le maillon ligure comme estimé. Il ne présente pas la combinaison comme
+un chemin historique unifié.
+
+### Sur les 3 000 km
+
+Le chemin ainsi reconstitué mesure environ **2 590 km** — cohérent avec la
+fourchette de 2 200 à 2 600 km attendue. Les 3 000 km sont conservés comme
+**objectif rond et symbolique** : c'est le choix de Julien, et c'est aussi ce
+qui donne exactement 60 tampons de 50 km. Le tracé est mis à cette échelle,
+donc les positions relatives restent fidèles.
 
 **Conséquence importante :** le nom du lieu affiché est *déduit* de la position
 calculée, jamais saisi à la main. Les deux ne peuvent donc pas diverger quand la
 distance change.
+
+### Une décision restée ouverte
+
+La Via Tolosana franchit historiquement les Pyrénées au **col du Somport**, puis
+devient le Camino Aragonés et rejoint le Camino Francés à Puente la Reina —
+**sans passer par Saint-Jean-Pied-de-Port**. Le tracé actuel passe par
+Saint-Jean : c'est l'option symbolique, plus simple à raconter puisque c'est la
+« porte de Compostelle » la plus connue, mais elle mêle deux chemins distincts.
+
+Les deux se défendent. Le choix appartient à Julien.
 
 ---
 

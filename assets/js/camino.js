@@ -102,6 +102,31 @@
     }
   }
 
+  /* ---- composition du tracé --------------------------------------------------
+     Le chemin enchaîne trois itinéraires réels et un maillon sans équivalent
+     historique. Le site l'annonce au lieu de laisser croire à un chemin unique.
+     ---------------------------------------------------------------------------- */
+
+  function renderLegs() {
+    const host = $("[data-legs]");
+    if (!host || !D.legs) return;
+
+    const kmOf = (name) => (D.route.find((s) => s.name === name) || {}).km ?? 0;
+
+    host.innerHTML = D.legs.map((leg) => {
+      const from = kmOf(leg.from), to = kmOf(leg.to);
+      const done = km >= to;
+      const here = km > from && km < to;
+      return `
+        <li class="leg${leg.estimated ? " is-estimated" : ""}${done ? " is-done" : ""}${here ? " is-here" : ""}">
+          <span class="leg-range">${nf(from, 0)} — ${nf(to, 0)} km</span>
+          <strong>${leg.name}${leg.estimated ? ' <em>estimé</em>' : ""}</strong>
+          <span class="leg-ends">${leg.from} → ${leg.to}</span>
+          <p>${leg.note}</p>
+        </li>`;
+    }).join("");
+  }
+
   /* ---- compagnons de route -------------------------------------------------- */
 
   function renderCompagnons() {
@@ -310,6 +335,48 @@
     });
   }
 
+  /* ---- fiche d'étape détaillée ------------------------------------------------
+     Le contenu vient des données, jamais du HTML : une étape sans récit affiche
+     un état d'attente au lieu du texte d'une autre étape.
+     ------------------------------------------------------------------------------ */
+
+  function renderSheet() {
+    const host = $("[data-sheet-body]");
+    if (!host) return;
+
+    const name = nearing.name;
+    const story = D.stories[name] || null;
+    const leg = (D.legs || []).find((l) => {
+      const to = (D.route.find((s) => s.name === l.to) || {}).km ?? 0;
+      return nearing.km <= to;
+    });
+
+    if (!story) {
+      host.innerHTML = `
+        <p class="overline">${leg ? leg.name : "Sur le chemin"}</p>
+        <h2>${name}</h2>
+        <p class="lead">Cette étape n’a pas encore de récit.</p>
+        <p class="sheet-note">
+          Les fiches s’écrivent au fil du chemin. Une étape non documentée reste
+          vierge — elle n’emprunte pas le texte d’une autre.
+        </p>`;
+      return;
+    }
+
+    host.innerHTML = `
+      <p class="overline">${leg ? leg.name : "Sur le chemin"}</p>
+      <h2>${name}</h2>
+      ${story.region ? `<p class="sheet-region">${story.region}</p>` : ""}
+      ${story.lead ? `<p class="lead">${story.lead}</p>` : ""}
+      ${story.body ? `<p>${story.body}</p>` : ""}
+      ${story.quote ? `<blockquote>« ${story.quote} »</blockquote>` : ""}
+      ${S.mode === "demo"
+        ? `<p class="sheet-note" data-demo-only>Distances calées sur les guides de
+           pèlerins : approximations à ±5 à 10 % selon les sources, en attente d’un
+           tracé GPX précis.</p>`
+        : ""}`;
+  }
+
   /* ---- fenêtres -------------------------------------------------------------- */
 
   function wireDialogs() {
@@ -367,8 +434,10 @@
 
   renderMode();
   renderHeader();
+  renderLegs();
   renderCompagnons();
   renderCredential();
+  renderSheet();
   renderTransformation();
   renderMap();
   wireDialogs();
