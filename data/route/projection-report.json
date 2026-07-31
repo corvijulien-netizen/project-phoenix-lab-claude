@@ -994,5 +994,87 @@
       "projection_distance_m": 265.2,
       "status": "ok"
     }
-  ]
+  ],
+  "resolution": {
+    "decided_at": "2026-07-31T15:26:16.722Z",
+    "decided_by": "Julien (verification independante sur master-route.gpx) + Claude (recalcul par le meme pipeline)",
+    "removed": [
+      {
+        "name": "Aulla",
+        "reason": "10.77 km du trace reel + viole l ordre monotone (segment italien, variante Via Francigena differente)"
+      },
+      {
+        "name": "Béziers",
+        "reason": "37.4 km du trace reel — variante GR653 differente (corridor Béziers-Narbonne-Carcassonne)"
+      },
+      {
+        "name": "Narbonne",
+        "reason": "51.8 km du trace reel — meme variante"
+      },
+      {
+        "name": "Carcassonne",
+        "reason": "34.9 km du trace reel — meme variante"
+      },
+      {
+        "name": "Castelnaudary",
+        "reason": "9.2 km du trace reel — meme variante"
+      },
+      {
+        "name": "Aire-sur-l’Adour",
+        "reason": "33.3 km du trace reel — variante Orthez-Navarrenx"
+      },
+      {
+        "name": "Arzacq-Arraziguet",
+        "reason": "26.6 km du trace reel — meme variante"
+      },
+      {
+        "name": "Orthez",
+        "reason": "26.2 km du trace reel — meme variante"
+      },
+      {
+        "name": "Navarrenx",
+        "reason": "8.2 km du trace reel — meme variante"
+      }
+    ],
+    "added": [
+      {
+        "name": "Lodève",
+        "projected_km": 1404.835,
+        "projection_distance_m": 33.5,
+        "reason": "identifiee pour combler le vide Montpellier->Toulouse (235,6 km puis 130,6 km sans ville confirmee) ou Auch->Saint-Jean"
+      },
+      {
+        "name": "Castres",
+        "projected_km": 1560.219,
+        "projection_distance_m": 146.6,
+        "reason": "identifiee pour combler le vide Montpellier->Toulouse (235,6 km puis 130,6 km sans ville confirmee) ou Auch->Saint-Jean"
+      },
+      {
+        "name": "Revel",
+        "projected_km": 1599.347,
+        "projection_distance_m": 81.8,
+        "reason": "identifiee pour combler le vide Montpellier->Toulouse (235,6 km puis 130,6 km sans ville confirmee) ou Auch->Saint-Jean"
+      },
+      {
+        "name": "Villefranche-de-Lauragais",
+        "projected_km": 1650.029,
+        "projection_distance_m": 110.4,
+        "reason": "identifiee pour combler le vide Montpellier->Toulouse (235,6 km puis 130,6 km sans ville confirmee) ou Auch->Saint-Jean"
+      },
+      {
+        "name": "Pau",
+        "projected_km": 1911.518,
+        "projection_distance_m": 4200,
+        "reason": "identifiee pour combler le vide Montpellier->Toulouse (235,6 km puis 130,6 km sans ville confirmee) ou Auch->Saint-Jean"
+      },
+      {
+        "name": "Oloron-Sainte-Marie",
+        "projected_km": 1949.473,
+        "projection_distance_m": 72.3,
+        "reason": "identifiee pour combler le vide Montpellier->Toulouse (235,6 km puis 130,6 km sans ville confirmee) ou Auch->Saint-Jean"
+      }
+    ],
+    "final_city_count": 86,
+    "note": "La ligne base (89 villes) ci-dessus reste le releve brut d origine ; cette section documente la decision finale prise a partir de ce releve. camino-data.js contient desormais les 86 villes retenues, avec leur km reel (mis a l echelle du cap symbolique de 3000 km, facteur x1.0728)."
+  }
 }

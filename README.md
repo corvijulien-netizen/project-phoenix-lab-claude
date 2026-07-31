@@ -62,13 +62,19 @@ index.html                      la page
 assets/
   css/camino.css                toute la mise en forme
   data/camino-state.js          ← LES CHIFFRES (le seul fichier à modifier)
-  data/camino-data.js           le tracé : 89 villes réelles, Rome → Santiago
+  data/camino-data.js           le tracé : 86 villes réelles, Rome → Santiago
   data/europe-geo.js            contours côtiers et frontières (Natural Earth)
   js/camino.js                  rendu de la page
   js/camino-map.js              la carte
   js/vendor/                    Leaflet 1.9.4, embarqué
   fonts/                        EB Garamond + Inter, auto-hébergées
   img/                          illustrations d'étape
+data/
+  gpx/master-route.gpx           tracé source, 131 042 points, 7 relations OSM
+  gpx/sources.md                 traçabilité complète (licence, jonctions)
+  route/master-route.geojson     le même tracé, converti en LineString WGS84
+  route/route-version.json       version du tracé, historique des changements
+  route/projection-report.json   détail des 86 villes projetées, ville par ville
 baseline/                       l'ancienne version, gardée pour comparaison
 ```
 
@@ -96,59 +102,89 @@ Non négociables, elles sont vérifiées à chaque modification :
 
 ## Comment la position est calculée
 
-Le tracé compte 89 villes réelles, de Rome à Santiago.
+Le tracé compte **86 villes réelles**, de Rome à Santiago, chacune **projetée
+perpendiculairement** sur une géométrie GPX authentique — jamais reliée à vol
+d'oiseau, et jamais calée sur des distances de guide approximatives.
 
-Les distances ne sont **pas** déduites du vol d'oiseau. Elles sont **calées sur
-une vingtaine de distances de référence** relevées par les guides et offices de
-pèlerins (Sutri à 45 km, Viterbe à 92, Sienne à 260, Lucques à 419, Burgos à
-280 depuis Saint-Jean, Santiago à 780…). Entre deux points d'ancrage, les
-villes intermédiaires sont réparties au prorata.
+### La source : 7 relations OpenStreetMap, pas un tracé dessiné à la main
 
-Une approche plus simple — un facteur de sinuosité unique appliqué à tout le
-tracé — a été essayée puis **abandonnée** : elle étirait de la même façon une
-côte rectiligne et un franchissement de col, et se trompait jusqu'à **+39 %**
-sur le Camino Francés. Le calage par ancres tombe juste sur chaque référence.
+```
+data/gpx/master-route.gpx        le tracé complet, 131 042 points GPS
+data/gpx/sources.md              la traçabilité : 7 relations OSM, licence ODbL,
+                                  écart de jonction pour chaque raccord
+data/route/master-route.geojson  le même tracé, converti en LineString WGS84
+data/route/route-version.json    la version de ce tracé (historique des futurs
+                                  changements de géométrie)
+data/route/projection-report.json le détail des 86 villes projetées : km réel,
+                                  distance de projection, décision motivée pour
+                                  chaque ville ajoutée ou retirée
+```
 
-> **Ces distances restent des approximations.** Les guides varient de ±5 à 10 %
-> selon les sources et les variantes. Elles ne remplacent pas un tracé GPX, et
-> ne doivent pas être traitées comme des mesures au mètre.
+Distance réelle du tracé : **2 796,42 km** — validée à 0,000 % près contre la
+valeur calculée indépendamment par les deux relevés (Julien puis Claude, sur le
+même fichier GPX).
 
-### Un tracé composé, pas un chemin historique
+Le tracé enchaîne 7 chemins de pèlerinage réels et sourcés, affichés tels quels
+sous la carte, dans la bande « Un tracé composé » :
 
-Il n'existe pas de « chemin officiel Rome → Santiago ». Le tracé enchaîne :
-
-| Segment | Statut |
+| Segment | Relation OSM |
 | --- | --- |
-| **Via Francigena** — Rome → Lucques | itinéraire réel, section la mieux documentée |
-| **Côte ligure** — Lucques → Arles | **estimé** — aucun chemin de pèlerinage ne relie la Toscane à la Provence ; suit l'ancienne Via Aurelia |
-| **Via Tolosana** — Arles → Saint-Jean-Pied-de-Port | itinéraire réel, classé UNESCO en 1998 |
-| **Camino Francés** — Saint-Jean → Santiago | itinéraire réel, le mieux balisé |
+| Via Francigena — Rome → Sarzana | 11860709 |
+| Via della Costa — Sarzana → Vintimille | 11685878 |
+| Via Aurelia — Vintimille → Arles | 8298137 |
+| Voie d'Arles (Via Tolosana) — Arles → Oloron-Sainte-Marie | 389715 |
+| Piémont pyrénéen — Oloron-Sainte-Marie → Saint-Jean-Pied-de-Port | 368453 |
+| Voie du Puy — Saint-Jean-Pied-de-Port → frontière espagnole | 138227 |
+| Camino Francés — frontière espagnole → Santiago | 2163573 |
 
-Le site l'affiche tel quel, dans la bande « Un tracé composé » sous la carte, et
-marque le maillon ligure comme estimé. Il ne présente pas la combinaison comme
-un chemin historique unifié.
+Il n'existe pas de « chemin officiel Rome → Santiago » : c'est une composition
+de chemins réels et distincts, et le site le dit plutôt que de la présenter
+comme un chemin historique unifié. Contrairement à la version précédente de ce
+document, **aucun tronçon n'est plus une estimation narrative** — les 7
+segments sont désormais des relations OSM identifiées.
 
-### Sur les 3 000 km
+### Le vrai corridor français, découvert par projection
 
-Le chemin ainsi reconstitué mesure environ **2 590 km** — cohérent avec la
-fourchette de 2 200 à 2 600 km attendue. Les 3 000 km sont conservés comme
-**objectif rond et symbolique** : c'est le choix de Julien, et c'est aussi ce
-qui donne exactement 60 tampons de 50 km. Le tracé est mis à cette échelle,
-donc les positions relatives restent fidèles.
+La première version de ce tracé (calée sur des distances de guide) plaçait
+17 villes sur un corridor plausible mais faux : Béziers, Narbonne, Carcassonne,
+Castelnaudary, Aire-sur-l'Adour, Arzacq-Arraziguet, Orthez, Navarrenx — jusqu'à
+**52 km** du vrai tracé une fois la géométrie GPX disponible. Elles appartenaient
+à une autre variante du GR653, pas à celle que suit ce fichier.
 
-**Conséquence importante :** le nom du lieu affiché est *déduit* de la position
-calculée, jamais saisi à la main. Les deux ne peuvent donc pas diverger quand la
-distance change.
+Le vrai corridor, confirmé par projection (moins de 500 m d'écart pour chaque
+ville) : **Arles → Castres → Toulouse → Auch → Pau → Oloron-Sainte-Marie →
+Saint-Jean-Pied-de-Port.** Six villes ont été ajoutées après vérification
+(Lodève, Castres, Revel, Villefranche-de-Lauragais, Pau, Oloron-Sainte-Marie),
+chacune à moins de 500 m du tracé réel. Une septième (Aulla, section italienne)
+a été retirée pour la même raison : 10,8 km d'écart, et une position qui violait
+l'ordre du parcours. Le détail complet, ville par ville, est dans
+`data/route/projection-report.json`, section `resolution`.
 
-### Une décision restée ouverte
+Cela répond au passage à la question précédemment ouverte du Somport : la
+géométrie réelle confirme que ce tracé passe bien par Saint-Jean-Pied-de-Port,
+pas par le col du Somport.
 
-La Via Tolosana franchit historiquement les Pyrénées au **col du Somport**, puis
-devient le Camino Aragonés et rejoint le Camino Francés à Puente la Reina —
-**sans passer par Saint-Jean-Pied-de-Port**. Le tracé actuel passe par
-Saint-Jean : c'est l'option symbolique, plus simple à raconter puisque c'est la
-« porte de Compostelle » la plus connue, mais elle mêle deux chemins distincts.
+### Sur les 3 000 km affichés — et ce qui reste une vraie question
 
-Les deux se défendent. Le choix appartient à Julien.
+Le site affiche **« ≈ 3 000 km »** comme cap symbolique — un choix de Julien,
+conservé tel quel, distinct de la distance réelle du tracé (2 796,42 km). Les
+positions de chaque ville viennent de la géométrie réelle, mises à l'échelle de
+ce cap symbolique par un facteur unique (×1,0728) : la précision relative entre
+deux villes n'en souffre pas.
+
+**Ce choix mérite d'être reconfirmé maintenant que le tracé réel existe.** Le cap
+de 3 000 km est aussi ce qui donne exactement 60 tampons de 50 km — un chiffre
+rond, pas un hasard. Basculer l'affichage sur la distance réelle (2 796,42 km)
+casserait cette règle : 2 796 / 50 = 55,92, pas un compte rond. Ce n'est pas une
+simple substitution de texte, et le choix appartient à Julien :
+
+- garder 3 000 km symbolique (aucun changement, le statu quo) ;
+- passer à ~2 800 km réels avec 56 tampons pleins de 50 km et un reliquat ;
+- un autre découpage à discuter.
+
+**Conséquence importante, inchangée :** le nom du lieu affiché est *déduit* de
+la position calculée, jamais saisi à la main. Les deux ne peuvent donc pas
+diverger quand la distance change.
 
 ---
 
