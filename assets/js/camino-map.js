@@ -135,7 +135,7 @@ window.CaminoMap = (() => {
     });
 
     /* ---- le chemin --------------------------------------------------------- */
-    const coords = D.route.map((s) => s.coords);
+    const coords = D.places.map((s) => s.coords);
     const here = D.locate(state.distanceKm ?? 0);
 
     // Portion restante : pointillés discrets.
@@ -158,20 +158,20 @@ window.CaminoMap = (() => {
     function walkedCoords(km) {
       const pos = D.locate(km);
       const out = [];
-      for (const stop of D.route) {
+      for (const stop of D.places) {
         if (stop.km <= km) out.push(stop.coords);
       }
       out.push(pos.coords);
-      return out.length > 1 ? out : [D.route[0].coords, pos.coords];
+      return out.length > 1 ? out : [D.places[0].coords, pos.coords];
     }
 
     /* ---- villes ------------------------------------------------------------ */
     const cityMarkers = [];
     let labelFlip = 0;
-    const firstStop = D.route[0];
-    const lastStop = D.route[D.route.length - 1];
+    const firstStop = D.places[0];
+    const lastStop = D.places[D.places.length - 1];
 
-    D.route.forEach((stop) => {
+    D.places.forEach((stop) => {
       if (stop.rank > 2) return;              // les hameaux n'encombrent pas la carte
       const isEndpoint = stop === firstStop || stop === lastStop;
       const reached = stop.km <= (state.distanceKm ?? 0);

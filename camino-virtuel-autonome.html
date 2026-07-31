@@ -1370,6 +1370,9 @@ main{margin-left:var(--rail-w);padding:38px 40px 40px;max-width:1680px}
 .ink-violet{--stamp-ink:#65558a}
 .ink-sepia {--stamp-ink:#8a6437}
 .ink-ocre  {--stamp-ink:#a8752c}
+/* Encre réservée au tampon de départ, Rome : brique romaine, distincte des
+   six encres qui se partagent les tampons ordinaires du chemin. */
+.ink-romano{--stamp-ink:#9a3324}
 
 /* Contenu du cachet : colonne centrée dans un cadre borné, pour que les noms
    longs (Villafranca del Bierzo, Campagnano di Roma) se plient sur deux lignes
@@ -1581,14 +1584,16 @@ body{margin:0}
   <nav class="nav" aria-label="Navigation principale">
     <a class="nav-item is-active" href="#carte">Le chemin</a>
     <a class="nav-item" href="#credential">Le crédential</a>
-    <a class="nav-item" href="#journal">Le journal</a>
+    <a class="nav-item" href="#transformation">La transformation</a>
   </nav>
 
-  <!-- Les quatre compagnons vivent ici, dans la colonne — jamais sous la carte.
-       Ils accompagnent le voyage, ils ne sont pas le récit. -->
-  <section class="companions" aria-labelledby="companions-title">
-    <h2 id="companions-title">Compagnons de route</h2>
-    <ul data-compagnons></ul>
+  <!-- Les données personnelles de Julien vivent ici, dans la colonne — jamais
+       sous la carte. « Compagnons de route » est réservé à la future
+       communauté qui suit l'aventure (Bible, ch. 1, §6.3) : ce nom ne doit
+       plus être réutilisé pour cette section. -->
+  <section class="companions" aria-labelledby="daily-title">
+    <h2 id="daily-title">Mon quotidien</h2>
+    <ul data-daily></ul>
     <p class="companions-note" data-demo-only>
       Ces relevés se connecteront aux exports Santé. Rien n’est estimé :
       une mesure absente reste absente.
@@ -1626,9 +1631,9 @@ body{margin:0}
       <p class="odometer-value">
         <strong data-km-total>—</strong><span>km</span>
       </p>
-      <p class="odometer-scale">sur <b data-km-goal>3 000</b> — <b data-percent>0</b> %</p>
+      <p class="odometer-scale">sur <b data-km-goal>2 796</b> — <b data-percent>0</b> %</p>
       <div class="track" data-progress-bar role="progressbar"
-           aria-valuemin="0" aria-valuemax="3000" aria-valuenow="0">
+           aria-valuemin="0" aria-valuemax="2796.42" aria-valuenow="0">
         <i></i>
       </div>
       <p class="odometer-today" data-today></p>
@@ -1639,7 +1644,7 @@ body{margin:0}
   <section class="chapter" id="carte" aria-labelledby="carte-title">
     <div class="chapter-head">
       <h2 id="carte-title">Le chemin</h2>
-      <p>Rome → Santiago de Compostela, environ 3 000 km selon le tracé retenu.</p>
+      <p>Rome → Santiago de Compostela, 2 796,42 km selon la géométrie réelle du tracé.</p>
     </div>
 
     <div class="map-and-stage">
@@ -1694,8 +1699,7 @@ body{margin:0}
     <div class="chapter-head">
       <h2 id="cred-title">Le crédential</h2>
       <p>
-        <b><span data-stamp-count>0</span> tampons sur <span data-stamp-total>60</span></b>
-        — <span data-next-stamp></span>
+        <b data-stamp-label>—</b> — les prochains lieux se révèlent au fil du chemin.
       </p>
       <div class="rail-nav">
         <button type="button" data-accordion-prev aria-label="Volet précédent">‹</button>
@@ -1711,17 +1715,21 @@ body{margin:0}
     </p>
   </section>
 
-  <!-- ── journal ─────────────────────────────────────────────────────────── -->
-  <section class="chapter" id="journal" aria-labelledby="journal-title">
+  <!-- ── transformation ──────────────────────────────────────────────────────
+       Distincte, techniquement, du futur journal quotidien et du futur carnet
+       de la communauté (Bible, ch. 1, §13 et §15) : ces deux composants
+       restent à construire, une fois cadrés. Cette section ne contient que le
+       comparateur visuel — c'est tout ce qu'elle est aujourd'hui. -->
+  <section class="chapter" id="transformation" aria-labelledby="transformation-title">
     <div class="chapter-head">
-      <h2 id="journal-title">Le journal</h2>
+      <h2 id="transformation-title">La transformation</h2>
       <p>Ce que le chemin fait au corps, consigné dans la durée.</p>
     </div>
     <div class="compare-host" data-compare></div>
   </section>
 
   <footer class="foot">
-    <p><b>Camino Virtuel</b> — Rome → Santiago, environ 3 000 km selon le tracé.</p>
+    <p><b>Camino Virtuel</b> — Rome → Santiago, 2 796,42 km selon la géométrie réelle du tracé.</p>
     <p data-demo-only>Toutes les valeurs affichées sont des données de démonstration.</p>
   </footer>
 </main>
@@ -1746,34 +1754,43 @@ window.CAMINO_GEO = {"type":"FeatureCollection","features":[{"type":"Feature","p
 <script>/* ============================================================================
    Camino Virtuel — données du chemin
    ----------------------------------------------------------------------------
-   Ce fichier ne contient QUE le tracé et le récit. Aucune donnée personnelle,
-   aucune donnée Santé. Les valeurs mesurées vivent dans camino-state.js.
+   Ce fichier ne contient QUE le tracé, les lieux et le récit. Aucune donnée
+   personnelle, aucune donnée Santé. Les valeurs mesurées vivent dans
+   camino-state.js.
 
    Règle de conception : le HTML n'écrit aucun chiffre en dur. Tout ce qui
    s'affiche est calculé à partir d'ici et de l'état. Un chiffre absent reste
    absent — il ne doit jamais être remplacé par une valeur plausible.
+
+   ┌────────────────────────────────────────────────────────────────────────┐
+   │  Place et Stamp sont deux entités distinctes (Bible, ch. 1)             │
+   │                                                                        │
+   │  Un `place` est un point du tracé : coordonnées, kilomètre réel,       │
+   │  densité d'affichage sur la carte. Un `stamp` est un lieu choisi pour   │
+   │  son poids culturel ou symbolique, qui RÉFÉRENCE un lieu par son id     │
+   │  (`placeId`) plutôt que de dupliquer ses coordonnées. Tous les lieux    │
+   │  ne sont pas des tampons ; le choix des tampons est une sélection       │
+   │  narrative, jamais un calcul kilométrique.                              │
+   └────────────────────────────────────────────────────────────────────────┘
    ========================================================================== */
 
 window.CAMINO_DATA = (() => {
   "use strict";
 
   /* --------------------------------------------------------------------------
-     Le tracé Rome → Santiago.
+     Les lieux du tracé Rome → Santiago.
 
-     Chaque ville porte désormais un `km` réel, projeté perpendiculairement sur
-     la géométrie GPX authentique du pèlerinage (jamais à vol d'oiseau) :
+     Chaque lieu porte un `km` réel, projeté perpendiculairement sur la
+     géométrie GPX authentique du pèlerinage (jamais à vol d'oiseau, jamais
+     calé sur des distances de guide approximatives) :
 
        source      data/gpx/master-route.gpx — 7 relations OpenStreetMap
                    (licence ODbL, © OpenStreetMap contributors), traçabilité
                    complète dans data/gpx/sources.md
        pipeline    data/route/master-route.geojson, route-version.json,
                    projection-report.json
-       distance réelle du tracé : 2 796,42 km
-
-     Ces `km` sont mis à l'échelle du cap symbolique de 3 000 km (facteur
-     ×1,0728) — voir plus bas pourquoi ce cap est conservé tel quel. Les
-     positions RELATIVES, elles, viennent intégralement de la géométrie
-     réelle : ce n'est plus une approximation par guide de voyage.
+       distance réelle du tracé, et distance de référence du projet :
+       2 796,42 km — ce n'est plus un cap symbolique arrondi.
 
      Quatre villes ont été retirées après vérification par projection : elles
      appartiennent à une variante du chemin différente de celle que suit ce
@@ -1786,98 +1803,102 @@ window.CAMINO_DATA = (() => {
      Revel, Villefranche-de-Lauragais, Pau, Oloron-Sainte-Marie), chacune à
      moins de 500 m du tracé réel.
      -------------------------------------------------------------------------- */
-  const route = [
-    { name: "Rome",                        coords: [41.9028,  12.4964], country: "IT", rank: 1, km:     0.3 },
-    { name: "Monte Mario",                 coords: [41.9192,  12.4504], country: "IT", rank: 3, km:     4.6 },
-    { name: "La Giustiniana",              coords: [41.9652,  12.4073], country: "IT", rank: 3, km:    15.4 },
-    { name: "La Storta",                   coords: [42.0018,  12.3789], country: "IT", rank: 3, km:    21.2 },
-    { name: "Isola Farnese",               coords: [42.0215,  12.3763], country: "IT", rank: 3, km:    22.9 },
-    { name: "Formello",                    coords: [42.0783,  12.4000], country: "IT", rank: 3, km:    35.8 },
-    { name: "Campagnano di Roma",          coords: [42.1354,  12.3749], country: "IT", rank: 3, km:    44.8 },
-    { name: "Nepi",                        coords: [42.2422,  12.3467], country: "IT", rank: 3, km:    55.1 },
-    { name: "Sutri",                       coords: [42.2470,  12.2168], country: "IT", rank: 3, km:    72.6 },
-    { name: "Capranica",                   coords: [42.2556,  12.1739], country: "IT", rank: 3, km:    79.3 },
-    { name: "Vetralla",                    coords: [42.3198,  12.0543], country: "IT", rank: 3, km:    96.6 },
-    { name: "Viterbe",                     coords: [42.4207,  12.1077], country: "IT", rank: 2, km:   120.7 },
-    { name: "Montefiascone",               coords: [42.5393,  12.0316], country: "IT", rank: 3, km:   139.6 },
-    { name: "Bolsena",                     coords: [42.6440,  11.9858], country: "IT", rank: 3, km:   157.3 },
-    { name: "Acquapendente",               coords: [42.7424,  11.8687], country: "IT", rank: 3, km:   181.8 },
-    { name: "Radicofani",                  coords: [42.8954,  11.7675], country: "IT", rank: 3, km:   207.2 },
-    { name: "San Quirico d’Orcia",         coords: [43.0578,  11.6040], country: "IT", rank: 3, km:   242.8 },
-    { name: "Buonconvento",                coords: [43.1372,  11.4817], country: "IT", rank: 3, km:   266.7 },
-    { name: "Sienne",                      coords: [43.3188,  11.3308], country: "IT", rank: 1, km:   299.9 },
-    { name: "Monteriggioni",               coords: [43.3897,  11.2233], country: "IT", rank: 3, km:   321.9 },
-    { name: "San Gimignano",               coords: [43.4676,  11.0430], country: "IT", rank: 3, km:   354.9 },
-    { name: "Altopascio",                  coords: [43.8139,  10.6772], country: "IT", rank: 3, km:   425.9 },
-    { name: "Lucques",                     coords: [43.8429,  10.5027], country: "IT", rank: 2, km:   446.0 },
-    { name: "Sarzana",                     coords: [44.1122,   9.9636], country: "IT", rank: 3, km:   531.2 },
-    { name: "La Spezia",                   coords: [44.1024,   9.8241], country: "IT", rank: 3, km:   547.2 },
-    { name: "Rapallo",                     coords: [44.3497,   9.2297], country: "IT", rank: 3, km:   636.0 },
-    { name: "Gênes",                       coords: [44.4056,   8.9463], country: "IT", rank: 2, km:   671.3 },
-    { name: "Savone",                      coords: [44.3091,   8.4772], country: "IT", rank: 3, km:   723.9 },
-    { name: "Finale Ligure",               coords: [44.1697,   8.3436], country: "IT", rank: 3, km:   759.5 },
-    { name: "Albenga",                     coords: [44.0490,   8.2127], country: "IT", rank: 3, km:   785.6 },
-    { name: "Imperia",                     coords: [43.8878,   8.0289], country: "IT", rank: 3, km:   823.8 },
-    { name: "San Remo",                    coords: [43.8159,   7.7761], country: "IT", rank: 3, km:   870.6 },
-    { name: "Vintimille",                  coords: [43.7912,   7.6083], country: "IT", rank: 3, km:   888.6 },
-    { name: "Menton",                      coords: [43.7750,   7.4975], country: "FR", rank: 3, km:   901.6 },
-    { name: "Monaco",                      coords: [43.7384,   7.4246], country: "FR", rank: 3, km:   914.5 },
-    { name: "Nice",                        coords: [43.7102,   7.2620], country: "FR", rank: 2, km:   940.1 },
-    { name: "Antibes",                     coords: [43.5808,   7.1251], country: "FR", rank: 3, km:   980.8 },
-    { name: "Cannes",                      coords: [43.5528,   7.0174], country: "FR", rank: 3, km:  1003.5 },
-    { name: "Fréjus",                      coords: [43.4332,   6.7370], country: "FR", rank: 3, km:  1051.0 },
-    { name: "Brignoles",                   coords: [43.4058,   6.0616], country: "FR", rank: 3, km:  1141.5 },
-    { name: "Saint-Maximin",               coords: [43.4525,   5.8619], country: "FR", rank: 3, km:  1170.9 },
-    { name: "Aix-en-Provence",             coords: [43.5297,   5.4474], country: "FR", rank: 2, km:  1220.3 },
-    { name: "Salon-de-Provence",           coords: [43.6406,   5.0975], country: "FR", rank: 3, km:  1263.8 },
-    { name: "Arles",                       coords: [43.6766,   4.6278], country: "FR", rank: 1, km:  1319.7 },
-    { name: "Saint-Gilles",                coords: [43.6766,   4.4307], country: "FR", rank: 3, km:  1343.8 },
-    { name: "Lunel",                       coords: [43.6772,   4.1361], country: "FR", rank: 3, km:  1378.3 },
-    { name: "Montpellier",                 coords: [43.6108,   3.8767], country: "FR", rank: 2, km:  1421.1 },
-    { name: "Lodève",                      coords: [43.7314,   3.3183], country: "FR", rank: 3, km:  1507.1 },
-    { name: "Castres",                     coords: [43.6058,   2.2411], country: "FR", rank: 2, km:  1673.8 },
-    { name: "Revel",                       coords: [43.4553,   2.0028], country: "FR", rank: 3, km:  1715.8 },
-    { name: "Villefranche-de-Lauragais",   coords: [43.4014,   1.7194], country: "FR", rank: 3, km:  1770.2 },
-    { name: "Toulouse",                    coords: [43.6047,   1.4442], country: "FR", rank: 1, km:  1813.9 },
-    { name: "Gimont",                      coords: [43.6272,   0.8756], country: "FR", rank: 3, km:  1881.8 },
-    { name: "Auch",                        coords: [43.6454,   0.5867], country: "FR", rank: 3, km:  1917.1 },
-    { name: "Maubourguet",                 coords: [43.4690,   0.0350], country: "FR", rank: 3, km:  1995.1 },
-    { name: "Pau",                         coords: [43.2951,  -0.3708], country: "FR", rank: 2, km:  2050.7 },
-    { name: "Oloron-Sainte-Marie",         coords: [43.1929,  -0.6087], country: "FR", rank: 3, km:  2091.4 },
-    { name: "Saint-Jean-Pied-de-Port",     coords: [43.1632,  -1.2379], country: "FR", rank: 1, km:  2176.4 },
-    { name: "Roncevaux",                   coords: [43.0090,  -1.3190], country: "ES", rank: 2, km:  2202.3 },
-    { name: "Pampelune",                   coords: [42.8125,  -1.6458], country: "ES", rank: 2, km:  2248.1 },
-    { name: "Puente la Reina",             coords: [42.6722,  -1.8144], country: "ES", rank: 3, km:  2273.2 },
-    { name: "Estella",                     coords: [42.6710,  -2.0320], country: "ES", rank: 3, km:  2296.5 },
-    { name: "Los Arcos",                   coords: [42.5686,  -2.1925], country: "ES", rank: 3, km:  2319.4 },
-    { name: "Logroño",                     coords: [42.4627,  -2.4449], country: "ES", rank: 2, km:  2349.3 },
-    { name: "Nájera",                      coords: [42.4180,  -2.7280], country: "ES", rank: 3, km:  2379.4 },
-    { name: "Santo Domingo",               coords: [42.4410,  -2.9530], country: "ES", rank: 3, km:  2402.6 },
-    { name: "Belorado",                    coords: [42.4200,  -3.1919], country: "ES", rank: 3, km:  2426.9 },
-    { name: "Burgos",                      coords: [42.3439,  -3.6969], country: "ES", rank: 1, km:  2479.3 },
-    { name: "Frómista",                    coords: [42.2670,  -4.4060], country: "ES", rank: 3, km:  2550.0 },
-    { name: "Carrión de los Condes",       coords: [42.3372,  -4.6031], country: "ES", rank: 3, km:  2570.2 },
-    { name: "Sahagún",                     coords: [42.3720,  -5.0300], country: "ES", rank: 3, km:  2613.1 },
-    { name: "Mansilla de las Mulas",       coords: [42.4989,  -5.4172], country: "ES", rank: 3, km:  2652.2 },
-    { name: "León",                        coords: [42.5987,  -5.5671], country: "ES", rank: 1, km:  2672.2 },
-    { name: "Hospital de Órbigo",          coords: [42.4636,  -5.8811], country: "ES", rank: 3, km:  2706.8 },
-    { name: "Astorga",                     coords: [42.4550,  -6.0520], country: "ES", rank: 3, km:  2723.6 },
-    { name: "Ponferrada",                  coords: [42.5460,  -6.5960], country: "ES", rank: 3, km:  2781.0 },
-    { name: "Villafranca del Bierzo",      coords: [42.6064,  -6.8092], country: "ES", rank: 3, km:  2805.4 },
-    { name: "O Cebreiro",                  coords: [42.7080,  -7.0430], country: "ES", rank: 2, km:  2835.3 },
-    { name: "Triacastela",                 coords: [42.7561,  -7.2378], country: "ES", rank: 3, km:  2857.6 },
-    { name: "Sarria",                      coords: [42.7790,  -7.4140], country: "ES", rank: 3, km:  2876.9 },
-    { name: "Portomarín",                  coords: [42.8060,  -7.6160], country: "ES", rank: 3, km:  2900.6 },
-    { name: "Palas de Rei",                coords: [42.8740,  -7.8680], country: "ES", rank: 3, km:  2927.4 },
-    { name: "Melide",                      coords: [42.9140,  -8.0140], country: "ES", rank: 3, km:  2943.0 },
-    { name: "Arzúa",                       coords: [42.9280,  -8.1640], country: "ES", rank: 3, km:  2958.5 },
-    { name: "O Pedrouzo",                  coords: [42.9058,  -8.3644], country: "ES", rank: 3, km:  2979.2 },
-    { name: "Santiago",                    coords: [42.8782,  -8.5448], country: "ES", rank: 1, km:  3000.0 }
+  const places = [
+    { id: "rome",                      name: "Rome",                        coords: [41.9028,  12.4964], country: "IT", rank: 1, km:     0.27 },
+    { id: "monte-mario",               name: "Monte Mario",                 coords: [41.9192,  12.4504], country: "IT", rank: 3, km:     4.33 },
+    { id: "la-giustiniana",            name: "La Giustiniana",              coords: [41.9652,  12.4073], country: "IT", rank: 3, km:    14.35 },
+    { id: "la-storta",                 name: "La Storta",                   coords: [42.0018,  12.3789], country: "IT", rank: 3, km:    19.74 },
+    { id: "isola-farnese",             name: "Isola Farnese",               coords: [42.0215,  12.3763], country: "IT", rank: 3, km:    21.32 },
+    { id: "formello",                  name: "Formello",                    coords: [42.0783,  12.4000], country: "IT", rank: 3, km:    33.32 },
+    { id: "campagnano-di-roma",        name: "Campagnano di Roma",          coords: [42.1354,  12.3749], country: "IT", rank: 3, km:    41.75 },
+    { id: "nepi",                      name: "Nepi",                        coords: [42.2422,  12.3467], country: "IT", rank: 3, km:    51.40 },
+    { id: "sutri",                     name: "Sutri",                       coords: [42.2470,  12.2168], country: "IT", rank: 3, km:    67.69 },
+    { id: "capranica",                 name: "Capranica",                   coords: [42.2556,  12.1739], country: "IT", rank: 3, km:    73.95 },
+    { id: "vetralla",                  name: "Vetralla",                    coords: [42.3198,  12.0543], country: "IT", rank: 3, km:    90.02 },
+    { id: "viterbe",                   name: "Viterbe",                     coords: [42.4207,  12.1077], country: "IT", rank: 2, km:   112.47 },
+    { id: "montefiascone",             name: "Montefiascone",               coords: [42.5393,  12.0316], country: "IT", rank: 3, km:   130.11 },
+    { id: "bolsena",                   name: "Bolsena",                     coords: [42.6440,  11.9858], country: "IT", rank: 3, km:   146.64 },
+    { id: "acquapendente",             name: "Acquapendente",               coords: [42.7424,  11.8687], country: "IT", rank: 3, km:   169.47 },
+    { id: "radicofani",                name: "Radicofani",                  coords: [42.8954,  11.7675], country: "IT", rank: 3, km:   193.17 },
+    { id: "san-quirico-d-orcia",       name: "San Quirico d’Orcia",         coords: [43.0578,  11.6040], country: "IT", rank: 3, km:   226.33 },
+    { id: "buonconvento",              name: "Buonconvento",                coords: [43.1372,  11.4817], country: "IT", rank: 3, km:   248.63 },
+    { id: "sienne",                    name: "Sienne",                      coords: [43.3188,  11.3308], country: "IT", rank: 1, km:   279.57 },
+    { id: "monteriggioni",             name: "Monteriggioni",               coords: [43.3897,  11.2233], country: "IT", rank: 3, km:   300.07 },
+    { id: "san-gimignano",             name: "San Gimignano",               coords: [43.4676,  11.0430], country: "IT", rank: 3, km:   330.86 },
+    { id: "altopascio",                name: "Altopascio",                  coords: [43.8139,  10.6772], country: "IT", rank: 3, km:   397.04 },
+    { id: "lucques",                   name: "Lucques",                     coords: [43.8429,  10.5027], country: "IT", rank: 2, km:   415.70 },
+    { id: "sarzana",                   name: "Sarzana",                     coords: [44.1122,   9.9636], country: "IT", rank: 3, km:   495.11 },
+    { id: "la-spezia",                 name: "La Spezia",                   coords: [44.1024,   9.8241], country: "IT", rank: 3, km:   510.10 },
+    { id: "rapallo",                   name: "Rapallo",                     coords: [44.3497,   9.2297], country: "IT", rank: 3, km:   592.81 },
+    { id: "genes",                     name: "Gênes",                       coords: [44.4056,   8.9463], country: "IT", rank: 2, km:   625.76 },
+    { id: "savone",                    name: "Savone",                      coords: [44.3091,   8.4772], country: "IT", rank: 3, km:   674.80 },
+    { id: "finale-ligure",             name: "Finale Ligure",               coords: [44.1697,   8.3436], country: "IT", rank: 3, km:   707.91 },
+    { id: "albenga",                   name: "Albenga",                     coords: [44.0490,   8.2127], country: "IT", rank: 3, km:   732.29 },
+    { id: "imperia",                   name: "Imperia",                     coords: [43.8878,   8.0289], country: "IT", rank: 3, km:   767.90 },
+    { id: "san-remo",                  name: "San Remo",                    coords: [43.8159,   7.7761], country: "IT", rank: 3, km:   811.56 },
+    { id: "vintimille",                name: "Vintimille",                  coords: [43.7912,   7.6083], country: "IT", rank: 3, km:   828.30 },
+    { id: "menton",                    name: "Menton",                      coords: [43.7750,   7.4975], country: "FR", rank: 3, km:   840.44 },
+    { id: "monaco",                    name: "Monaco",                      coords: [43.7384,   7.4246], country: "FR", rank: 3, km:   852.45 },
+    { id: "nice",                      name: "Nice",                        coords: [43.7102,   7.2620], country: "FR", rank: 2, km:   876.26 },
+    { id: "antibes",                   name: "Antibes",                     coords: [43.5808,   7.1251], country: "FR", rank: 3, km:   914.20 },
+    { id: "cannes",                    name: "Cannes",                      coords: [43.5528,   7.0174], country: "FR", rank: 3, km:   935.39 },
+    { id: "frejus",                    name: "Fréjus",                      coords: [43.4332,   6.7370], country: "FR", rank: 3, km:   979.64 },
+    { id: "brignoles",                 name: "Brignoles",                   coords: [43.4058,   6.0616], country: "FR", rank: 3, km:  1064.07 },
+    { id: "saint-maximin",             name: "Saint-Maximin",               coords: [43.4525,   5.8619], country: "FR", rank: 3, km:  1091.42 },
+    { id: "aix-en-provence",           name: "Aix-en-Provence",             coords: [43.5297,   5.4474], country: "FR", rank: 2, km:  1137.48 },
+    { id: "salon-de-provence",         name: "Salon-de-Provence",           coords: [43.6406,   5.0975], country: "FR", rank: 3, km:  1177.99 },
+    { id: "arles",                     name: "Arles",                       coords: [43.6766,   4.6278], country: "FR", rank: 1, km:  1230.10 },
+    { id: "saint-gilles",              name: "Saint-Gilles",                coords: [43.6766,   4.4307], country: "FR", rank: 3, km:  1252.60 },
+    { id: "lunel",                     name: "Lunel",                       coords: [43.6772,   4.1361], country: "FR", rank: 3, km:  1284.77 },
+    { id: "montpellier",               name: "Montpellier",                 coords: [43.6108,   3.8767], country: "FR", rank: 2, km:  1324.64 },
+    { id: "lodeve",                    name: "Lodève",                      coords: [43.7314,   3.3183], country: "FR", rank: 3, km:  1404.84 },
+    { id: "castres",                   name: "Castres",                     coords: [43.6058,   2.2411], country: "FR", rank: 2, km:  1560.22 },
+    { id: "revel",                     name: "Revel",                       coords: [43.4553,   2.0028], country: "FR", rank: 3, km:  1599.35 },
+    { id: "villefranche-de-lauragais", name: "Villefranche-de-Lauragais",   coords: [43.4014,   1.7194], country: "FR", rank: 3, km:  1650.03 },
+    { id: "toulouse",                  name: "Toulouse",                    coords: [43.6047,   1.4442], country: "FR", rank: 1, km:  1690.78 },
+    { id: "gimont",                    name: "Gimont",                      coords: [43.6272,   0.8756], country: "FR", rank: 3, km:  1754.09 },
+    { id: "auch",                      name: "Auch",                        coords: [43.6454,   0.5867], country: "FR", rank: 3, km:  1787.00 },
+    { id: "maubourguet",               name: "Maubourguet",                 coords: [43.4690,   0.0350], country: "FR", rank: 3, km:  1859.74 },
+    { id: "pau",                       name: "Pau",                         coords: [43.2951,  -0.3708], country: "FR", rank: 2, km:  1911.52 },
+    { id: "oloron-sainte-marie",       name: "Oloron-Sainte-Marie",         coords: [43.1929,  -0.6087], country: "FR", rank: 3, km:  1949.47 },
+    { id: "saint-jean-pied-de-port",   name: "Saint-Jean-Pied-de-Port",     coords: [43.1632,  -1.2379], country: "FR", rank: 1, km:  2028.75 },
+    { id: "roncevaux",                 name: "Roncevaux",                   coords: [43.0090,  -1.3190], country: "ES", rank: 2, km:  2052.83 },
+    { id: "pampelune",                 name: "Pampelune",                   coords: [42.8125,  -1.6458], country: "ES", rank: 2, km:  2095.52 },
+    { id: "puente-la-reina",           name: "Puente la Reina",             coords: [42.6722,  -1.8144], country: "ES", rank: 3, km:  2118.93 },
+    { id: "estella",                   name: "Estella",                     coords: [42.6710,  -2.0320], country: "ES", rank: 3, km:  2140.70 },
+    { id: "los-arcos",                 name: "Los Arcos",                   coords: [42.5686,  -2.1925], country: "ES", rank: 3, km:  2161.98 },
+    { id: "logrono",                   name: "Logroño",                     coords: [42.4627,  -2.4449], country: "ES", rank: 2, km:  2189.85 },
+    { id: "najera",                    name: "Nájera",                      coords: [42.4180,  -2.7280], country: "ES", rank: 3, km:  2217.91 },
+    { id: "santo-domingo",             name: "Santo Domingo",               coords: [42.4410,  -2.9530], country: "ES", rank: 3, km:  2239.52 },
+    { id: "belorado",                  name: "Belorado",                    coords: [42.4200,  -3.1919], country: "ES", rank: 3, km:  2262.17 },
+    { id: "burgos",                    name: "Burgos",                      coords: [42.3439,  -3.6969], country: "ES", rank: 1, km:  2311.08 },
+    { id: "fromista",                  name: "Frómista",                    coords: [42.2670,  -4.4060], country: "ES", rank: 3, km:  2376.97 },
+    { id: "carrion-de-los-condes",     name: "Carrión de los Condes",       coords: [42.3372,  -4.6031], country: "ES", rank: 3, km:  2395.81 },
+    { id: "sahagun",                   name: "Sahagún",                     coords: [42.3720,  -5.0300], country: "ES", rank: 3, km:  2435.73 },
+    { id: "mansilla-de-las-mulas",     name: "Mansilla de las Mulas",       coords: [42.4989,  -5.4172], country: "ES", rank: 3, km:  2472.18 },
+    { id: "leon",                      name: "León",                        coords: [42.5987,  -5.5671], country: "ES", rank: 1, km:  2490.87 },
+    { id: "hospital-de-orbigo",        name: "Hospital de Órbigo",          coords: [42.4636,  -5.8811], country: "ES", rank: 3, km:  2523.10 },
+    { id: "astorga",                   name: "Astorga",                     coords: [42.4550,  -6.0520], country: "ES", rank: 3, km:  2538.82 },
+    { id: "ponferrada",                name: "Ponferrada",                  coords: [42.5460,  -6.5960], country: "ES", rank: 3, km:  2592.29 },
+    { id: "villafranca-del-bierzo",    name: "Villafranca del Bierzo",      coords: [42.6064,  -6.8092], country: "ES", rank: 3, km:  2615.05 },
+    { id: "o-cebreiro",                name: "O Cebreiro",                  coords: [42.7080,  -7.0430], country: "ES", rank: 2, km:  2642.91 },
+    { id: "triacastela",               name: "Triacastela",                 coords: [42.7561,  -7.2378], country: "ES", rank: 3, km:  2663.72 },
+    { id: "sarria",                    name: "Sarria",                      coords: [42.7790,  -7.4140], country: "ES", rank: 3, km:  2681.66 },
+    { id: "portomarin",                name: "Portomarín",                  coords: [42.8060,  -7.6160], country: "ES", rank: 3, km:  2703.80 },
+    { id: "palas-de-rei",              name: "Palas de Rei",                coords: [42.8740,  -7.8680], country: "ES", rank: 3, km:  2728.76 },
+    { id: "melide",                    name: "Melide",                      coords: [42.9140,  -8.0140], country: "ES", rank: 3, km:  2743.33 },
+    { id: "arzua",                     name: "Arzúa",                       coords: [42.9280,  -8.1640], country: "ES", rank: 3, km:  2757.75 },
+    { id: "o-pedrouzo",                name: "O Pedrouzo",                  coords: [42.9058,  -8.3644], country: "ES", rank: 3, km:  2777.03 },
+    { id: "santiago",                  name: "Santiago",                    coords: [42.8782,  -8.5448], country: "ES", rank: 1, km:  2796.42 }
   ];
 
-  const TOTAL_KM      = 3000;  // cap symbolique conservé — voir commentaire ci-dessus
-  const STAMP_EVERY   = 50;    // un tampon tous les 50 km réels
-  const STAMP_COUNT   = TOTAL_KM / STAMP_EVERY;  // 60
+  const placeById = (id) => places.find((p) => p.id === id) || null;
+  const placeByName = (name) => places.find((p) => p.name === name) || null;
+
+  // Distance de référence du projet : la distance RÉELLE du tracé (Bible,
+  // règle fondatrice n°5). Ce n'est plus un cap symbolique arrondi — chaque
+  // `km` ci-dessus est directement la position réelle sur la géométrie GPX.
+  const TOTAL_KM = 2796.42;
 
   /* ---- interpolation ------------------------------------------------------ */
 
@@ -1889,14 +1910,12 @@ window.CAMINO_DATA = (() => {
     const clamped = Math.max(0, Math.min(TOTAL_KM, km));
 
     if (clamped <= 0) {
-      return { coords: route[0].coords.slice(), from: route[0], to: route[1], ratioInLeg: 0 };
+      return { coords: places[0].coords.slice(), from: places[0], to: places[1], ratioInLeg: 0 };
     }
 
-    // Chaque ville porte désormais sa distance de marche calée : on interpole
-    // directement entre deux villes, sans repasser par le vol d'oiseau.
-    for (let i = 1; i < route.length; i += 1) {
-      if (route[i].km >= clamped) {
-        const a = route[i - 1], b = route[i];
+    for (let i = 1; i < places.length; i += 1) {
+      if (places[i].km >= clamped) {
+        const a = places[i - 1], b = places[i];
         const span = b.km - a.km;
         const r = span === 0 ? 0 : (clamped - a.km) / span;
         return {
@@ -1909,72 +1928,65 @@ window.CAMINO_DATA = (() => {
       }
     }
 
-    const last = route[route.length - 1];
+    const last = places[places.length - 1];
     return { coords: last.coords.slice(), from: last, to: last, ratioInLeg: 1 };
   }
 
-  /** Ville-étape la plus proche d'une distance donnée (pour nommer un tampon). */
-  function placeAt(km) {
-    let best = route[0];
-    let bestGap = Infinity;
-    for (const stop of route) {
-      const gap = Math.abs(stop.km - km);
-      if (gap < bestGap) { bestGap = gap; best = stop; }
-    }
-    return best;
-  }
+  /* --------------------------------------------------------------------------
+     Les tampons.
 
-  /* ---- le crédential ------------------------------------------------------ */
+     Un tampon RÉFÉRENCE un lieu (`placeId`) ; il ne recopie pas ses
+     coordonnées. Son statut n'est jamais stocké : il est recalculé à chaque
+     affichage à partir de la progression réelle de Julien, pour qu'un tampon
+     non atteint ne puisse jamais fuiter dans l'interface.
+
+       hidden    lieu non atteint — jamais rendu, aucun nom ni km affiché.
+       unlocked  lieu atteint — le tampon existe dans le carnet.
+       revealed  réservé pour un usage futur (par exemple : un lieu annoncé
+                 juste avant d'être atteint, sans être encore tamponné). Ce
+                 mécanisme n'est pas cadré : le statut n'est jamais produit
+                 aujourd'hui, seulement prévu dans le type.
+
+     Le nombre final de tampons n'est pas figé (Bible, règle n°10) : cette
+     liste n'en contient qu'un seul pour l'instant, Rome, et grandit au fil
+     d'une sélection culturelle et narrative — jamais d'un calcul kilométrique.
+     Remplacer STAMPS par un appel au futur Knowledge Graph ne demandera pas
+     de changer le reste du site : locate(), placeById() et getStamps() sont
+     la seule interface dont le reste du code a besoin.
+     -------------------------------------------------------------------------- */
+  const STAMPS = [
+    {
+      id: "stamp-rome",
+      name: "Rome",
+      placeId: "rome",
+      routeDistanceKm: 0,
+      category: "inspired",
+      isDeparture: true,
+      ink: "romano",
+      shape: "ecusson",
+      description:
+        "Départ symbolique du pèlerinage, à Saint-Pierre de Rome. Tampon " +
+        "provisoire — inspiré des codes graphiques jacquaires (la coquille) " +
+        "et de l'identité de Rome (les clés), sans reproduire un tampon " +
+        "existant — en attente d'une source officielle ou d'un motif " +
+        "documenté du patrimoine romain.",
+      sourceIds: []
+    }
+    // Les prochains tampons s'ajoutent ici au rythme d'une sélection des
+    // lieux les plus significatifs du chemin — jamais tous les 50 km.
+  ];
 
   /**
-   * Les 60 tampons. Chaque tampon est attaché à une ville réelle et reçoit une
-   * forme, une encre et une rotation dérivées de son rang — de sorte que deux
-   * tampons voisins ne se ressemblent jamais, sans pour autant être aléatoires
-   * (le rendu est stable d'un chargement à l'autre).
+   * Les tampons à afficher pour une progression donnée. Un lieu non atteint
+   * n'apparaît jamais dans le tableau renvoyé : il n'existe simplement pas
+   * pour l'appelant, ce qui rend un affichage prématuré structurellement
+   * impossible plutôt que masqué par du CSS.
    */
-  const INKS   = ["indigo", "rouge", "vert", "violet", "sepia", "ocre"];
-  const SHAPES = ["cercle", "ovale", "ecusson", "tonneau", "carre"];
-
-  function buildStamps() {
-    const stamps = [];
-    const taken = new Set();
-
-    // Rome est le point de départ, pas une étape à tamponner.
-    // Santiago est réservé au 60ᵉ tampon : le dernier cachet du carnet doit
-    // être celui de l'arrivée, à 3 000 km — jamais un autre.
-    const arrival = route[route.length - 1];
-    const pool = route.slice(1, route.length - 1);
-
-    for (let i = 1; i <= STAMP_COUNT; i += 1) {
-      const km = i * STAMP_EVERY;
-
-      let place;
-      if (i === STAMP_COUNT) {
-        place = arrival;
-      } else {
-        // Ville la plus proche encore disponible : deux tampons ne portent
-        // jamais le même lieu, ce qui évite l'effet de motif répété.
-        let best = null, bestGap = Infinity;
-        for (const stop of pool) {
-          if (taken.has(stop.name)) continue;
-          const gap = Math.abs(stop.km - km);
-          if (gap < bestGap) { bestGap = gap; best = stop; }
-        }
-        place = best || arrival;
-      }
-      taken.add(place.name);
-
-      // Décalages premiers entre eux : le rendu varie sans être aléatoire,
-      // et reste identique d'un chargement à l'autre.
-      stamps.push({
-        index: i, km,
-        place: place.name, country: place.country, coords: place.coords,
-        ink:   INKS[(i * 5) % INKS.length],
-        shape: SHAPES[(i * 3) % SHAPES.length],
-        tilt:  ((i * 37) % 13) - 6
-      });
-    }
-    return stamps;
+  function getStamps(km) {
+    return STAMPS
+      .filter((s) => s.routeDistanceKm <= km)
+      .map((s) => ({ ...s, status: "unlocked", place: placeById(s.placeId) }))
+      .sort((a, b) => a.routeDistanceKm - b.routeDistanceKm);
   }
 
   /* ---- récits d'étape ------------------------------------------------------
@@ -2048,7 +2060,7 @@ window.CAMINO_DATA = (() => {
 
     "Santiago": {
       region: "Galice · Espagne",
-      lead: "Le terme du chemin, après trois mille kilomètres.",
+      lead: "Le terme du chemin.",
       body: "La légende raconte que le corps de l’apôtre Jacques, perdu en mer, " +
             "s’échoua sur la côte galicienne recouvert de coquilles Saint-Jacques. " +
             "Les rainures de la coquille figurent les chemins venus de toute " +
@@ -2061,8 +2073,7 @@ window.CAMINO_DATA = (() => {
      n'existe pas de « chemin officiel Rome → Santiago » : c'est une
      composition de chemins de pèlerinage distincts, et le site le dit plutôt
      que de la présenter comme un chemin historique unique. Chaque tronçon
-     correspond à une relation OpenStreetMap identifiée et sourcée — plus
-     aucun n'est une estimation narrative. */
+     correspond à une relation OpenStreetMap identifiée et sourcée. */
   const legs = [
     { name: "Via Francigena",  from: "Rome",  to: "Sarzana",
       note: "Section italienne du chemin de Canterbury à Rome, parcourue vers le nord. " +
@@ -2087,11 +2098,10 @@ window.CAMINO_DATA = (() => {
   ];
 
   return {
-    route, stories, legs,
+    places, stories, legs,
     totalKm: TOTAL_KM,
-    stampEveryKm: STAMP_EVERY,
-    stampCount: STAMP_COUNT,
-    locate, placeAt, buildStamps
+    placeById, placeByName,
+    locate, getStamps
   };
 })();
 </script>
@@ -2122,30 +2132,49 @@ window.CAMINO_STATE = {
      -------------------------------------------------------------------------- */
   mode: "demo",
 
-  /* ---- le chemin ---------------------------------------------------------- */
+  /* ---- le chemin -----------------------------------------------------------
+     Règle du projet (Bible, ch. 1, §8.2) : ces deux valeurs sont la SEULE
+     source des kilomètres qui font avancer le Camino. Elles ne viennent que
+     d'activités volontairement enregistrées pour le projet (WorkOutDoors,
+     Strava, Apple Exercice...). Les pas ordinaires du quotidien — travail,
+     courses, déplacements non enregistrés comme activité dédiée — n'y
+     entrent jamais, même indirectement via une autre tuile de l'interface.
+     -------------------------------------------------------------------------- */
 
   // Total cumulé réellement marché depuis le départ, en kilomètres.
   distanceKm: 18.6,
 
-  // Distance marchée aujourd'hui. null si la journée n'est pas encore relevée.
+  // Distance marchée aujourd'hui, via une activité officiellement enregistrée.
+  // null si la journée n'est pas encore relevée.
   todayKm: 11.2,
+
+  // Objectif d'activité quotidienne affiché dans « Mon quotidien ».
+  dailyGoalKm: 15,
 
   // Date du Jour 1. null tant qu'elle n'est pas fixée.
   // (Les anciens classeurs mentionnent deux dates qui ne concordent pas ;
   //  aucune des deux n'est reprise ici tant que Julien n'a pas tranché.)
   startDate: null,
 
-  /* ---- compagnons de route ------------------------------------------------
-     Ces quatre domaines accompagnent le voyage sans en être le récit.
-     Ils vivent dans la colonne de gauche, jamais sous la carte.
+  /* ---- mon quotidien ---------------------------------------------------------
+     Les données de santé passives de Julien — nutrition, sommeil, journal.
+     Elles accompagnent le voyage sans en être le récit, et vivent dans la
+     colonne de gauche, jamais sous la carte.
+
+     L'activité n'est PAS dupliquée ici : elle est dérivée de `todayKm`
+     ci-dessus au moment de l'affichage (voir renderDaily() dans camino.js).
+     Une seule source pour ce chiffre, pour qu'il ne puisse jamais diverger
+     entre « ce qui fait avancer le Camino » et « ce qui s'affiche ».
 
      Chaque entrée : { value, unit, goal, updatedAt }
        value     null  → « en attente », affiché comme tel
        goal      null  → aucun objectif fixé, aucune barre de progression
        updatedAt null  → provenance inconnue, la valeur n'est pas datée
+
+     « Compagnons de route » est réservé à la future communauté qui suit
+     l'aventure (Bible, ch. 1, §6.3) — ce nom ne doit plus être réutilisé ici.
      -------------------------------------------------------------------------- */
-  compagnons: {
-    activite:  { label: "Activité",  value: 11.2, unit: "km",     goal: 15,   updatedAt: null },
+  quotidien: {
     nutrition: { label: "Nutrition", value: null, unit: "kcal",   goal: null, updatedAt: null },
     sommeil:   { label: "Sommeil",   value: null, unit: "h",      goal: null, updatedAt: null },
     journal:   { label: "Journal",   value: null, unit: "entrée", goal: null, updatedAt: null }
@@ -2302,7 +2331,7 @@ window.CaminoMap = (() => {
     });
 
     /* ---- le chemin --------------------------------------------------------- */
-    const coords = D.route.map((s) => s.coords);
+    const coords = D.places.map((s) => s.coords);
     const here = D.locate(state.distanceKm ?? 0);
 
     // Portion restante : pointillés discrets.
@@ -2325,20 +2354,20 @@ window.CaminoMap = (() => {
     function walkedCoords(km) {
       const pos = D.locate(km);
       const out = [];
-      for (const stop of D.route) {
+      for (const stop of D.places) {
         if (stop.km <= km) out.push(stop.coords);
       }
       out.push(pos.coords);
-      return out.length > 1 ? out : [D.route[0].coords, pos.coords];
+      return out.length > 1 ? out : [D.places[0].coords, pos.coords];
     }
 
     /* ---- villes ------------------------------------------------------------ */
     const cityMarkers = [];
     let labelFlip = 0;
-    const firstStop = D.route[0];
-    const lastStop = D.route[D.route.length - 1];
+    const firstStop = D.places[0];
+    const lastStop = D.places[D.places.length - 1];
 
-    D.route.forEach((stop) => {
+    D.places.forEach((stop) => {
       if (stop.rank > 2) return;              // les hameaux n'encombrent pas la carte
       const isEndpoint = stop === firstStop || stop === lastStop;
       const reached = stop.km <= (state.distanceKm ?? 0);
@@ -2471,9 +2500,11 @@ window.CaminoMap = (() => {
   const km        = has(S.distanceKm) ? S.distanceKm : 0;
   const ratio     = Math.min(1, km / D.totalKm);
   const position  = D.locate(km);
-  const stamps    = D.buildStamps();
-  const earned    = stamps.filter((s) => s.km <= km).length;
-  const nextStamp = stamps.find((s) => s.km > km) || null;
+
+  // Seuls les tampons ATTEINTS existent pour le reste du programme : un lieu
+  // non révélé n'apparaît dans aucune structure de données, ce qui rend un
+  // affichage prématuré impossible plutôt que masqué par du CSS.
+  const stamps = D.getStamps(km);
 
   // Le lieu affiché est DÉDUIT de la position, jamais saisi à la main : les deux
   // ne peuvent donc pas diverger quand la distance change.
@@ -2545,7 +2576,7 @@ window.CaminoMap = (() => {
     const host = $("[data-legs]");
     if (!host || !D.legs) return;
 
-    const kmOf = (name) => (D.route.find((s) => s.name === name) || {}).km ?? 0;
+    const kmOf = (name) => (D.placeByName(name) || {}).km ?? 0;
 
     host.innerHTML = D.legs.map((leg) => {
       const from = kmOf(leg.from), to = kmOf(leg.to);
@@ -2561,13 +2592,26 @@ window.CaminoMap = (() => {
     }).join("");
   }
 
-  /* ---- compagnons de route -------------------------------------------------- */
+  /* ---- mon quotidien ---------------------------------------------------------
+     « Compagnons de route » est réservé à la future communauté (Bible, §6.3) :
+     cette colonne ne montre que les données personnelles de Julien.
+     L'activité n'est pas une donnée indépendante : elle est dérivée de
+     S.todayKm, la même valeur qui fait avancer le Camino — impossible que les
+     deux divergent puisque ce n'est jamais que la même source, affichée deux
+     fois.
+     ---------------------------------------------------------------------------- */
 
-  function renderCompagnons() {
-    const host = $("[data-compagnons]");
+  function renderDaily() {
+    const host = $("[data-daily]");
     if (!host) return;
 
-    host.innerHTML = Object.entries(S.compagnons).map(([key, c]) => {
+    const activite = {
+      label: "Activité", unit: "km",
+      value: S.todayKm, goal: S.dailyGoalKm ?? null, updatedAt: null
+    };
+    const entries = { activite, ...S.quotidien };
+
+    host.innerHTML = Object.entries(entries).map(([key, c]) => {
       const known = has(c.value);
       const pct = known && has(c.goal) && c.goal > 0
         ? Math.min(100, (c.value / c.goal) * 100)
@@ -2597,37 +2641,31 @@ window.CaminoMap = (() => {
      ---------------------------------------------------------------------------- */
 
   const PER_PANEL = 6;
+  const earned = stamps.length;
 
+  /* Un lieu non atteint n'existe jamais dans `stamps` (voir D.getStamps) :
+     tout ce qui arrive ici est déjà obtenu. Il n'y a donc plus de notion de
+     tampon « verrouillé » ou « en cours » — ce mécanisme appartenait au
+     système kilométrique retiré. */
   function stampMarkup(stamp) {
-    const done = stamp.km <= km;
-    const current = nextStamp && stamp.index === nextStamp.index;
-    const progress = current && stamp.km > 0
-      ? Math.max(0, Math.min(1, (km - (stamp.km - D.stampEveryKm)) / D.stampEveryKm))
-      : 0;
-
     const cls = [
-      "stamp",
-      `ink-${stamp.ink}`,
-      `shape-${stamp.shape}`,
-      done ? "is-earned" : "is-locked",
-      current ? "is-current" : ""
-    ].filter(Boolean).join(" ");
+      "stamp", "is-earned",
+      `ink-${stamp.ink || "sepia"}`,
+      `shape-${stamp.shape || "cercle"}`
+    ].join(" ");
 
-    const status = done
-      ? "Tampon obtenu"
-      : current
-        ? `${nf(km)} / ${nf(stamp.km, 0)} km`
-        : `à ${nf(stamp.km, 0)} km`;
+    const icon = stamp.isDeparture ? KEYS_SVG : SHELL_SVG;
+    const caption = stamp.isDeparture ? "Départ de l’aventure" : `${nf(stamp.routeDistanceKm, 0)} km`;
 
     return `
-      <li class="${cls}" style="--tilt:${stamp.tilt}deg;--fill:${(progress * 100).toFixed(1)}%">
+      <li class="${cls}" title="${stamp.description || ""}">
         <span class="stamp-face">
           <span class="stamp-ring" aria-hidden="true"></span>
-          <span class="stamp-place">${stamp.place}</span>
-          <span class="stamp-shell" aria-hidden="true">${SHELL_SVG}</span>
-          <span class="stamp-km">${nf(stamp.km, 0)} km</span>
+          <span class="stamp-place">${stamp.place ? stamp.place.name : stamp.name}</span>
+          <span class="stamp-shell" aria-hidden="true">${icon}</span>
+          <span class="stamp-km">${caption}</span>
         </span>
-        <span class="stamp-status">${status}</span>
+        <span class="stamp-status">Tampon obtenu</span>
       </li>`;
   }
 
@@ -2639,13 +2677,27 @@ window.CaminoMap = (() => {
       <path d="M20 33L8.4 23.4M20 33L12.3 19.8M20 33L17.3 17.9M20 33L22.7 17.9M20 33L27.7 19.8M20 33L31.6 23.4M20 33L20 16.9"/>
     </svg>`;
 
+  /* Clés croisées, motif générique inspiré des clés de saint Pierre — pour le
+     tampon provisoire de Rome uniquement. Schématique, pas la reproduction
+     d'un blason ou d'un tampon existant. */
+  const KEYS_SVG = `
+    <svg viewBox="0 0 40 40" aria-hidden="true">
+      <g transform="translate(20 20) rotate(-40)">
+        <path d="M0 -13V5.4M0 11m-4.6 0a4.6 4.6 0 1 0 9.2 0a4.6 4.6 0 1 0 -9.2 0M0 -13h5M0 -9.5h4"/>
+      </g>
+      <g transform="translate(20 20) rotate(40) scale(1,-1)">
+        <path d="M0 -13V5.4M0 11m-4.6 0a4.6 4.6 0 1 0 9.2 0a4.6 4.6 0 1 0 -9.2 0M0 -13h-5M0 -9.5h-4"/>
+      </g>
+    </svg>`;
+
   function renderCredential() {
     const host = $("[data-accordion]");
     if (!host) return;
 
     const panels = [];
 
-    // Volet de tête : l'identité du carnet.
+    // Volet de tête : l'identité du carnet. Aucun total n'est annoncé — le
+    // nombre final de tampons n'est pas figé (Bible, règle n°10).
     panels.push(`
       <section class="fold fold-cover" aria-label="Couverture du crédential">
         <span class="fold-emblem" aria-hidden="true">${SHELL_SVG}</span>
@@ -2654,28 +2706,28 @@ window.CaminoMap = (() => {
         <dl class="fold-id">
           <div><dt>Départ</dt><dd>Rome · Italie</dd></div>
           <div><dt>Arrivée</dt><dd>Santiago · Espagne</dd></div>
-          <div><dt>Distance</dt><dd>≈ ${nf(D.totalKm, 0)} km</dd></div>
-          <div><dt>Tampons</dt><dd>${earned} sur ${D.stampCount}</dd></div>
+          <div><dt>Distance</dt><dd>${nf(D.totalKm, 0)} km</dd></div>
         </dl>
-        <p class="fold-note">Un tampon tous les ${D.stampEveryKm} kilomètres réellement marchés.</p>
+        <p class="fold-note">Les tampons marquent les lieux les plus significatifs
+           du chemin. Ils se révèlent un par un, seulement lorsque Julien les
+           atteint réellement.</p>
       </section>`);
 
     for (let i = 0; i < stamps.length; i += PER_PANEL) {
       const slice = stamps.slice(i, i + PER_PANEL);
-      const from = slice[0].km - D.stampEveryKm;
-      const to = slice[slice.length - 1].km;
       panels.push(`
-        <section class="fold fold-page" aria-label="Tampons de ${nf(from, 0)} à ${nf(to, 0)} kilomètres">
+        <section class="fold fold-page" aria-label="Tampons obtenus">
           <header class="fold-head">
-            <span>${nf(from, 0)} — ${nf(to, 0)} km</span>
-            <small>${slice[0].place} → ${slice[slice.length - 1].place}</small>
+            <span>${earned} obtenu${earned > 1 ? "s" : ""}</span>
+            <small>${slice.map((s) => s.place ? s.place.name : s.name).join(" · ")}</small>
           </header>
           <ul class="stamp-row">${slice.map(stampMarkup).join("")}</ul>
         </section>`);
     }
 
-    // Volet final : la Compostela, scellée jusqu'au 60ᵉ tampon.
-    const complete = earned >= D.stampCount;
+    // Volet final : la Compostela, scellée jusqu'à l'arrivée réelle à
+    // Santiago — indépendamment du nombre de tampons obtenus en chemin.
+    const complete = km >= D.totalKm;
     panels.push(`
       <section class="fold fold-compostela${complete ? " is-open" : ""}"
                aria-label="Compostela virtuelle">
@@ -2683,18 +2735,13 @@ window.CaminoMap = (() => {
         <p class="fold-overline">Compostela</p>
         <h3>${complete ? "Chemin accompli" : "Scellée"}</h3>
         <p class="fold-note">${complete
-          ? "Les 60 tampons sont réunis. Le chemin de Rome à Santiago est achevé."
-          : `Elle se délivre au 60ᵉ tampon, à Santiago. Il en reste ${D.stampCount - earned}.`}</p>
+          ? "Le chemin de Rome à Santiago est achevé."
+          : "Elle se délivre à l’arrivée réelle à Santiago."}</p>
         <span class="wax" aria-hidden="true"><span>${SHELL_SVG}</span></span>
       </section>`);
 
     host.innerHTML = panels.join("");
-
-    $("[data-stamp-count]").textContent = String(earned);
-    $("[data-stamp-total]").textContent = String(D.stampCount);
-    $("[data-next-stamp]").innerHTML = nextStamp
-      ? `Prochain tampon à <strong>${nf(nextStamp.km, 0)} km</strong> — ${nearing.name} — encore ${nf(nextStamp.km - km)} km`
-      : "Tous les tampons sont réunis";
+    $("[data-stamp-label]").textContent = `${earned} tampon${earned > 1 ? "s" : ""} obtenu${earned > 1 ? "s" : ""}`;
   }
 
   /* ---- comparateur avant / après --------------------------------------------
@@ -2781,7 +2828,7 @@ window.CaminoMap = (() => {
     const name = nearing.name;
     const story = D.stories[name] || null;
     const leg = (D.legs || []).find((l) => {
-      const to = (D.route.find((s) => s.name === l.to) || {}).km ?? 0;
+      const to = (D.placeByName(l.to) || {}).km ?? 0;
       return nearing.km <= to;
     });
 
@@ -2869,7 +2916,7 @@ window.CaminoMap = (() => {
   renderMode();
   renderHeader();
   renderLegs();
-  renderCompagnons();
+  renderDaily();
   renderCredential();
   renderSheet();
   renderTransformation();

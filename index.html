@@ -31,14 +31,16 @@
   <nav class="nav" aria-label="Navigation principale">
     <a class="nav-item is-active" href="#carte">Le chemin</a>
     <a class="nav-item" href="#credential">Le crédential</a>
-    <a class="nav-item" href="#journal">Le journal</a>
+    <a class="nav-item" href="#transformation">La transformation</a>
   </nav>
 
-  <!-- Les quatre compagnons vivent ici, dans la colonne — jamais sous la carte.
-       Ils accompagnent le voyage, ils ne sont pas le récit. -->
-  <section class="companions" aria-labelledby="companions-title">
-    <h2 id="companions-title">Compagnons de route</h2>
-    <ul data-compagnons></ul>
+  <!-- Les données personnelles de Julien vivent ici, dans la colonne — jamais
+       sous la carte. « Compagnons de route » est réservé à la future
+       communauté qui suit l'aventure (Bible, ch. 1, §6.3) : ce nom ne doit
+       plus être réutilisé pour cette section. -->
+  <section class="companions" aria-labelledby="daily-title">
+    <h2 id="daily-title">Mon quotidien</h2>
+    <ul data-daily></ul>
     <p class="companions-note" data-demo-only>
       Ces relevés se connecteront aux exports Santé. Rien n’est estimé :
       une mesure absente reste absente.
@@ -76,9 +78,9 @@
       <p class="odometer-value">
         <strong data-km-total>—</strong><span>km</span>
       </p>
-      <p class="odometer-scale">sur <b data-km-goal>3 000</b> — <b data-percent>0</b> %</p>
+      <p class="odometer-scale">sur <b data-km-goal>2 796</b> — <b data-percent>0</b> %</p>
       <div class="track" data-progress-bar role="progressbar"
-           aria-valuemin="0" aria-valuemax="3000" aria-valuenow="0">
+           aria-valuemin="0" aria-valuemax="2796.42" aria-valuenow="0">
         <i></i>
       </div>
       <p class="odometer-today" data-today></p>
@@ -89,7 +91,7 @@
   <section class="chapter" id="carte" aria-labelledby="carte-title">
     <div class="chapter-head">
       <h2 id="carte-title">Le chemin</h2>
-      <p>Rome → Santiago de Compostela, environ 3 000 km selon le tracé retenu.</p>
+      <p>Rome → Santiago de Compostela, 2 796,42 km selon la géométrie réelle du tracé.</p>
     </div>
 
     <div class="map-and-stage">
@@ -145,8 +147,7 @@
     <div class="chapter-head">
       <h2 id="cred-title">Le crédential</h2>
       <p>
-        <b><span data-stamp-count>0</span> tampons sur <span data-stamp-total>60</span></b>
-        — <span data-next-stamp></span>
+        <b data-stamp-label>—</b> — les prochains lieux se révèlent au fil du chemin.
       </p>
       <div class="rail-nav">
         <button type="button" data-accordion-prev aria-label="Volet précédent">‹</button>
@@ -162,17 +163,21 @@
     </p>
   </section>
 
-  <!-- ── journal ─────────────────────────────────────────────────────────── -->
-  <section class="chapter" id="journal" aria-labelledby="journal-title">
+  <!-- ── transformation ──────────────────────────────────────────────────────
+       Distincte, techniquement, du futur journal quotidien et du futur carnet
+       de la communauté (Bible, ch. 1, §13 et §15) : ces deux composants
+       restent à construire, une fois cadrés. Cette section ne contient que le
+       comparateur visuel — c'est tout ce qu'elle est aujourd'hui. -->
+  <section class="chapter" id="transformation" aria-labelledby="transformation-title">
     <div class="chapter-head">
-      <h2 id="journal-title">Le journal</h2>
+      <h2 id="transformation-title">La transformation</h2>
       <p>Ce que le chemin fait au corps, consigné dans la durée.</p>
     </div>
     <div class="compare-host" data-compare></div>
   </section>
 
   <footer class="foot">
-    <p><b>Camino Virtuel</b> — Rome → Santiago, environ 3 000 km selon le tracé.</p>
+    <p><b>Camino Virtuel</b> — Rome → Santiago, 2 796,42 km selon la géométrie réelle du tracé.</p>
     <p data-demo-only>Toutes les valeurs affichées sont des données de démonstration.</p>
   </footer>
 </main>

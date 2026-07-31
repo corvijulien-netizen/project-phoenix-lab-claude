@@ -2,10 +2,19 @@
 
 > Mes pas sont réels. Le voyage est virtuel.
 
-Julien marche réellement, sac au dos, autour de chez lui. Chaque kilomètre réel
-le fait avancer virtuellement sur un pèlerinage de **Rome à Santiago de
-Compostela**, environ 3 000 km. Un crédential de **60 tampons** — un tous les
-50 km — se remplit au fil du chemin et débloque la Compostela virtuelle.
+Julien marche réellement, sac au dos, autour de chez lui. Chaque kilomètre
+volontairement enregistré pour le projet le fait avancer virtuellement sur un
+pèlerinage de **Rome à Santiago de Compostela**, 2 796,42 km selon la
+géométrie réelle du tracé. Un crédential se remplit au fil des lieux les plus
+significatifs qu'il atteint réellement — jamais tous les 50 km, jamais révélé
+à l'avance.
+
+La communauté ne marche pas. Elle suit Julien et devient témoin de son
+histoire.
+
+> **Référence du projet : [`docs/bible/chapitre-1-vision.md`](docs/bible/chapitre-1-vision.md).**
+> Ce document prime sur ce README en cas de désaccord. Toute décision
+> technique, éditoriale ou graphique doit rester cohérente avec lui.
 
 ---
 
@@ -27,19 +36,49 @@ géographiques, les fontes, l'illustration. Aucun appel à un service extérieur
 
 **Un seul fichier à modifier : `assets/data/camino-state.js`.**
 
-Tout le reste en découle — la carte, la position, le nombre de tampons, les
+Tout le reste en découle — la carte, la position, les tampons révélés, les
 pourcentages, les distances restantes. Il n'y a aucun chiffre écrit en dur
 ailleurs dans le site.
 
 ```js
 window.CAMINO_STATE = {
-  mode: "demo",        // "demo" = bandeau de démonstration | "reel" = données réelles
-  distanceKm: 18.6,    // total marché depuis le départ
-  todayKm: 11.2,       // marché aujourd'hui   (null si pas encore relevé)
-  startDate: null,     // date du Jour 1       (null tant qu'elle n'est pas fixée)
+  mode: "demo",         // "demo" = bandeau de démonstration | "reel" = données réelles
+  distanceKm: 18.6,     // total marché depuis le départ, activités officielles uniquement
+  todayKm: 11.2,        // marché aujourd'hui   (null si pas encore relevé)
+  dailyGoalKm: 15,      // objectif d'activité quotidienne affiché dans « Mon quotidien »
+  startDate: null,      // date du Jour 1       (null tant qu'elle n'est pas fixée)
   ...
 };
 ```
+
+`distanceKm` et `todayKm` sont la **seule** source des kilomètres qui font
+avancer le Camino (Bible, §8.2) : uniquement des activités volontairement
+enregistrées pour le projet, jamais les pas ordinaires du quotidien. La tuile
+« Activité » de la colonne de gauche affiche `todayKm` directement — ce n'est
+pas une valeur indépendante qui pourrait diverger.
+
+### Ajouter un tampon
+
+Les tampons vivent dans `assets/data/camino-data.js`, tableau `STAMPS`. Un
+lieu ne devient un tampon qu'après une sélection culturelle ou narrative —
+jamais par calcul de distance. Un tampon référence un lieu par son `placeId`
+plutôt que de dupliquer ses coordonnées :
+
+```js
+{
+  id: "stamp-...",
+  name: "...",
+  placeId: "...",           // doit exister dans `places`
+  routeDistanceKm: 0,       // km réel auquel le tampon se révèle
+  category: "official" | "historical" | "authorized-reproduction" | "inspired" | "camino-virtual",
+  description: "...",
+  sourceIds: []
+}
+```
+
+Un tampon dont `routeDistanceKm` n'est pas encore atteint **n'existe pour
+aucune partie du site** — `getStamps(km)` ne le renvoie pas. Ce n'est pas
+masqué par du CSS, c'est structurellement invisible.
 
 ### La règle du `null`
 
@@ -59,10 +98,12 @@ perdre en route.
 
 ```
 index.html                      la page
+docs/
+  bible/chapitre-1-vision.md     référence du projet — prime sur ce README
 assets/
   css/camino.css                toute la mise en forme
   data/camino-state.js          ← LES CHIFFRES (le seul fichier à modifier)
-  data/camino-data.js           le tracé : 86 villes réelles, Rome → Santiago
+  data/camino-data.js           les lieux (Place), les tampons (Stamp), le récit
   data/europe-geo.js            contours côtiers et frontières (Natural Earth)
   js/camino.js                  rendu de la page
   js/camino-map.js              la carte
@@ -74,7 +115,7 @@ data/
   gpx/sources.md                 traçabilité complète (licence, jonctions)
   route/master-route.geojson     le même tracé, converti en LineString WGS84
   route/route-version.json       version du tracé, historique des changements
-  route/projection-report.json   détail des 86 villes projetées, ville par ville
+  route/projection-report.json   détail des 86 lieux projetés, lieu par lieu
 baseline/                       l'ancienne version, gardée pour comparaison
 ```
 
@@ -86,13 +127,24 @@ effet sur le site.
 
 ## Les règles du projet
 
-Non négociables, elles sont vérifiées à chaque modification :
+Non négociables, elles sont vérifiées à chaque modification. Reprises et
+complétées par la Bible (`docs/bible/chapitre-1-vision.md`), qui fait foi en
+cas de désaccord :
 
+- Julien est le personnage principal ; la communauté suit, elle ne marche pas.
+- Les kilomètres ne viennent que d'activités volontairement enregistrées pour
+  le projet — jamais des pas ordinaires du quotidien.
+- La distance de référence est **2 796,42 km**, la distance réelle du tracé.
+- Les tampons ne sont **jamais** attribués tous les 50 km ; leur nombre final
+  n'est pas figé. Seul celui de Rome est visible au lancement ; les suivants
+  ne sont jamais affichés avant que Julien les atteigne réellement.
 - Aucune mention de « 365 jours » ni de « Camino 80 » dans l'interface.
 - Aucune donnée Santé, nutrition ou sommeil inventée — voir la règle du `null`.
 - Aucun export Apple Santé brut publié, aucune donnée privée sans accord.
 - Aucun commentaire Santé présenté comme un diagnostic médical.
-- Activité, Nutrition, Sommeil et Journal restent **dans la colonne de gauche**.
+- Aucune transformation corporelle artificiellement embellie.
+- « Mon quotidien » (colonne de gauche : Activité, Nutrition, Sommeil, Journal)
+  reste distinct de « Compagnons de route », réservé à la future communauté.
   Sous la carte, il y a le crédential — pas quatre blocs doublons.
 - La carte reste une **vraie carte** Leaflet, zoomable et déplaçable. Jamais une
   image statique.
@@ -164,27 +216,61 @@ Cela répond au passage à la question précédemment ouverte du Somport : la
 géométrie réelle confirme que ce tracé passe bien par Saint-Jean-Pied-de-Port,
 pas par le col du Somport.
 
-### Sur les 3 000 km affichés — et ce qui reste une vraie question
+### Sur la distance affichée — tranché par la Bible
 
-Le site affiche **« ≈ 3 000 km »** comme cap symbolique — un choix de Julien,
-conservé tel quel, distinct de la distance réelle du tracé (2 796,42 km). Les
-positions de chaque ville viennent de la géométrie réelle, mises à l'échelle de
-ce cap symbolique par un facteur unique (×1,0728) : la précision relative entre
-deux villes n'en souffre pas.
+Le site affichait auparavant un cap symbolique arrondi à 3 000 km, distinct de
+la distance réelle. La Bible de conception (règle fondatrice n°5) tranche cette
+question : **la distance de référence est 2 796,42 km**, la distance réelle du
+tracé — plus de cap arrondi, plus de mise à l'échelle. Chaque `km` dans
+`camino-data.js` est directement la position réelle projetée sur la géométrie
+GPX.
 
-**Ce choix mérite d'être reconfirmé maintenant que le tracé réel existe.** Le cap
-de 3 000 km est aussi ce qui donne exactement 60 tampons de 50 km — un chiffre
-rond, pas un hasard. Basculer l'affichage sur la distance réelle (2 796,42 km)
-casserait cette règle : 2 796 / 50 = 55,92, pas un compte rond. Ce n'est pas une
-simple substitution de texte, et le choix appartient à Julien :
+Conséquence directe : le crédential n'est plus non plus calé sur un découpage
+de 50 km (qui donnait artificiellement 60 tampons pour 3 000 km). Voir
+« Le crédential : un modèle piloté par les lieux » plus bas.
 
-- garder 3 000 km symbolique (aucun changement, le statu quo) ;
-- passer à ~2 800 km réels avec 56 tampons pleins de 50 km et un reliquat ;
-- un autre découpage à discuter.
+**Conséquence inchangée :** le nom du lieu affiché est *déduit* de la position
+calculée, jamais saisi à la main. Les deux ne peuvent donc pas diverger quand la
+distance change.
 
-**Conséquence importante, inchangée :** le nom du lieu affiché est *déduit* de
-la position calculée, jamais saisi à la main. Les deux ne peuvent donc pas
-diverger quand la distance change.
+---
+
+## Le crédential : un modèle piloté par les lieux
+
+Le tampon n'est plus un calcul kilométrique. C'est une entité (`Stamp`) qui
+référence un lieu (`Place`) par son identifiant, se révèle à un `routeDistanceKm`
+précis, et n'existe pour l'interface qu'une fois ce seuil atteint :
+
+```js
+{
+  id, name, placeId, routeDistanceKm,
+  status: "hidden" | "revealed" | "unlocked",   // calculé, jamais stocké
+  category: "official" | "historical" | "authorized-reproduction" | "inspired" | "camino-virtual",
+  image, description, sourceIds
+}
+```
+
+`status` n'est jamais persisté : `getStamps(km)` le recalcule à chaque appel à
+partir de la progression réelle, et **ne renvoie pas du tout** les tampons dont
+le seuil n'est pas atteint. Un tampon futur n'est donc pas masqué par du CSS —
+il n'existe simplement pour aucune partie du programme tant qu'il n'est pas
+atteint. `revealed` est prévu dans le type mais jamais produit aujourd'hui :
+la Bible n'a pas encore cadré à quoi correspondrait un lieu « révélé mais pas
+encore tamponné », donc ce mécanisme reste un point d'extension documenté,
+pas une fonctionnalité inventée.
+
+**Au lancement, un seul tampon existe : Rome.** Priorité appliquée pour son
+motif, dans l'ordre demandé par Julien : pas de tampon officiel/historique
+disponible ni de droit d'usage vérifié → un tampon **original**, `category:
+"inspired"`, dessiné pour ce projet (une coquille, motif jacquaire déjà utilisé
+partout ailleurs sur le site, et des clés croisées schématiques évoquant
+l'identité de Rome — sans reproduire aucun tampon existant). Il pourra être
+remplacé plus tard par une source officielle ou documentée, sans changement de
+structure : `getStamps()` est la seule interface dont le reste du site dépend.
+
+Le nombre final de tampons **n'est pas figé**. `STAMPS` grandit au rythme d'une
+sélection culturelle et narrative des lieux les plus significatifs du chemin —
+jamais d'un calcul de distance.
 
 ---
 
@@ -192,6 +278,6 @@ diverger quand la distance change.
 
 Tant que `mode` vaut `"demo"`, un bandeau **« Données de démonstration »**
 s'affiche et le pied de page le rappelle. Les valeurs actuelles — 18,6 km,
-La Storta, 0/60 tampons — servent uniquement à construire et tester.
+La Storta, un seul tampon (Rome) — servent uniquement à construire et tester.
 
 Elles seront remplacées par les vrais chiffres du Jour 1.

@@ -704,6 +704,9 @@ main{margin-left:var(--rail-w);padding:38px 40px 40px;max-width:1680px}
 .ink-violet{--stamp-ink:#65558a}
 .ink-sepia {--stamp-ink:#8a6437}
 .ink-ocre  {--stamp-ink:#a8752c}
+/* Encre réservée au tampon de départ, Rome : brique romaine, distincte des
+   six encres qui se partagent les tampons ordinaires du chemin. */
+.ink-romano{--stamp-ink:#9a3324}
 
 /* Contenu du cachet : colonne centrée dans un cadre borné, pour que les noms
    longs (Villafranca del Bierzo, Campagnano di Roma) se plient sur deux lignes

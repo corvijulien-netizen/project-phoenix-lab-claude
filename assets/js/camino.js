@@ -37,9 +37,11 @@
   const km        = has(S.distanceKm) ? S.distanceKm : 0;
   const ratio     = Math.min(1, km / D.totalKm);
   const position  = D.locate(km);
-  const stamps    = D.buildStamps();
-  const earned    = stamps.filter((s) => s.km <= km).length;
-  const nextStamp = stamps.find((s) => s.km > km) || null;
+
+  // Seuls les tampons ATTEINTS existent pour le reste du programme : un lieu
+  // non révélé n'apparaît dans aucune structure de données, ce qui rend un
+  // affichage prématuré impossible plutôt que masqué par du CSS.
+  const stamps = D.getStamps(km);
 
   // Le lieu affiché est DÉDUIT de la position, jamais saisi à la main : les deux
   // ne peuvent donc pas diverger quand la distance change.
@@ -111,7 +113,7 @@
     const host = $("[data-legs]");
     if (!host || !D.legs) return;
 
-    const kmOf = (name) => (D.route.find((s) => s.name === name) || {}).km ?? 0;
+    const kmOf = (name) => (D.placeByName(name) || {}).km ?? 0;
 
     host.innerHTML = D.legs.map((leg) => {
       const from = kmOf(leg.from), to = kmOf(leg.to);
@@ -127,13 +129,26 @@
     }).join("");
   }
 
-  /* ---- compagnons de route -------------------------------------------------- */
+  /* ---- mon quotidien ---------------------------------------------------------
+     « Compagnons de route » est réservé à la future communauté (Bible, §6.3) :
+     cette colonne ne montre que les données personnelles de Julien.
+     L'activité n'est pas une donnée indépendante : elle est dérivée de
+     S.todayKm, la même valeur qui fait avancer le Camino — impossible que les
+     deux divergent puisque ce n'est jamais que la même source, affichée deux
+     fois.
+     ---------------------------------------------------------------------------- */
 
-  function renderCompagnons() {
-    const host = $("[data-compagnons]");
+  function renderDaily() {
+    const host = $("[data-daily]");
     if (!host) return;
 
-    host.innerHTML = Object.entries(S.compagnons).map(([key, c]) => {
+    const activite = {
+      label: "Activité", unit: "km",
+      value: S.todayKm, goal: S.dailyGoalKm ?? null, updatedAt: null
+    };
+    const entries = { activite, ...S.quotidien };
+
+    host.innerHTML = Object.entries(entries).map(([key, c]) => {
       const known = has(c.value);
       const pct = known && has(c.goal) && c.goal > 0
         ? Math.min(100, (c.value / c.goal) * 100)
@@ -163,37 +178,31 @@
      ---------------------------------------------------------------------------- */
 
   const PER_PANEL = 6;
+  const earned = stamps.length;
 
+  /* Un lieu non atteint n'existe jamais dans `stamps` (voir D.getStamps) :
+     tout ce qui arrive ici est déjà obtenu. Il n'y a donc plus de notion de
+     tampon « verrouillé » ou « en cours » — ce mécanisme appartenait au
+     système kilométrique retiré. */
   function stampMarkup(stamp) {
-    const done = stamp.km <= km;
-    const current = nextStamp && stamp.index === nextStamp.index;
-    const progress = current && stamp.km > 0
-      ? Math.max(0, Math.min(1, (km - (stamp.km - D.stampEveryKm)) / D.stampEveryKm))
-      : 0;
-
     const cls = [
-      "stamp",
-      `ink-${stamp.ink}`,
-      `shape-${stamp.shape}`,
-      done ? "is-earned" : "is-locked",
-      current ? "is-current" : ""
-    ].filter(Boolean).join(" ");
+      "stamp", "is-earned",
+      `ink-${stamp.ink || "sepia"}`,
+      `shape-${stamp.shape || "cercle"}`
+    ].join(" ");
 
-    const status = done
-      ? "Tampon obtenu"
-      : current
-        ? `${nf(km)} / ${nf(stamp.km, 0)} km`
-        : `à ${nf(stamp.km, 0)} km`;
+    const icon = stamp.isDeparture ? KEYS_SVG : SHELL_SVG;
+    const caption = stamp.isDeparture ? "Départ de l’aventure" : `${nf(stamp.routeDistanceKm, 0)} km`;
 
     return `
-      <li class="${cls}" style="--tilt:${stamp.tilt}deg;--fill:${(progress * 100).toFixed(1)}%">
+      <li class="${cls}" title="${stamp.description || ""}">
         <span class="stamp-face">
           <span class="stamp-ring" aria-hidden="true"></span>
-          <span class="stamp-place">${stamp.place}</span>
-          <span class="stamp-shell" aria-hidden="true">${SHELL_SVG}</span>
-          <span class="stamp-km">${nf(stamp.km, 0)} km</span>
+          <span class="stamp-place">${stamp.place ? stamp.place.name : stamp.name}</span>
+          <span class="stamp-shell" aria-hidden="true">${icon}</span>
+          <span class="stamp-km">${caption}</span>
         </span>
-        <span class="stamp-status">${status}</span>
+        <span class="stamp-status">Tampon obtenu</span>
       </li>`;
   }
 
@@ -205,13 +214,27 @@
       <path d="M20 33L8.4 23.4M20 33L12.3 19.8M20 33L17.3 17.9M20 33L22.7 17.9M20 33L27.7 19.8M20 33L31.6 23.4M20 33L20 16.9"/>
     </svg>`;
 
+  /* Clés croisées, motif générique inspiré des clés de saint Pierre — pour le
+     tampon provisoire de Rome uniquement. Schématique, pas la reproduction
+     d'un blason ou d'un tampon existant. */
+  const KEYS_SVG = `
+    <svg viewBox="0 0 40 40" aria-hidden="true">
+      <g transform="translate(20 20) rotate(-40)">
+        <path d="M0 -13V5.4M0 11m-4.6 0a4.6 4.6 0 1 0 9.2 0a4.6 4.6 0 1 0 -9.2 0M0 -13h5M0 -9.5h4"/>
+      </g>
+      <g transform="translate(20 20) rotate(40) scale(1,-1)">
+        <path d="M0 -13V5.4M0 11m-4.6 0a4.6 4.6 0 1 0 9.2 0a4.6 4.6 0 1 0 -9.2 0M0 -13h-5M0 -9.5h-4"/>
+      </g>
+    </svg>`;
+
   function renderCredential() {
     const host = $("[data-accordion]");
     if (!host) return;
 
     const panels = [];
 
-    // Volet de tête : l'identité du carnet.
+    // Volet de tête : l'identité du carnet. Aucun total n'est annoncé — le
+    // nombre final de tampons n'est pas figé (Bible, règle n°10).
     panels.push(`
       <section class="fold fold-cover" aria-label="Couverture du crédential">
         <span class="fold-emblem" aria-hidden="true">${SHELL_SVG}</span>
@@ -220,28 +243,28 @@
         <dl class="fold-id">
           <div><dt>Départ</dt><dd>Rome · Italie</dd></div>
           <div><dt>Arrivée</dt><dd>Santiago · Espagne</dd></div>
-          <div><dt>Distance</dt><dd>≈ ${nf(D.totalKm, 0)} km</dd></div>
-          <div><dt>Tampons</dt><dd>${earned} sur ${D.stampCount}</dd></div>
+          <div><dt>Distance</dt><dd>${nf(D.totalKm, 0)} km</dd></div>
         </dl>
-        <p class="fold-note">Un tampon tous les ${D.stampEveryKm} kilomètres réellement marchés.</p>
+        <p class="fold-note">Les tampons marquent les lieux les plus significatifs
+           du chemin. Ils se révèlent un par un, seulement lorsque Julien les
+           atteint réellement.</p>
       </section>`);
 
     for (let i = 0; i < stamps.length; i += PER_PANEL) {
       const slice = stamps.slice(i, i + PER_PANEL);
-      const from = slice[0].km - D.stampEveryKm;
-      const to = slice[slice.length - 1].km;
       panels.push(`
-        <section class="fold fold-page" aria-label="Tampons de ${nf(from, 0)} à ${nf(to, 0)} kilomètres">
+        <section class="fold fold-page" aria-label="Tampons obtenus">
           <header class="fold-head">
-            <span>${nf(from, 0)} — ${nf(to, 0)} km</span>
-            <small>${slice[0].place} → ${slice[slice.length - 1].place}</small>
+            <span>${earned} obtenu${earned > 1 ? "s" : ""}</span>
+            <small>${slice.map((s) => s.place ? s.place.name : s.name).join(" · ")}</small>
           </header>
           <ul class="stamp-row">${slice.map(stampMarkup).join("")}</ul>
         </section>`);
     }
 
-    // Volet final : la Compostela, scellée jusqu'au 60ᵉ tampon.
-    const complete = earned >= D.stampCount;
+    // Volet final : la Compostela, scellée jusqu'à l'arrivée réelle à
+    // Santiago — indépendamment du nombre de tampons obtenus en chemin.
+    const complete = km >= D.totalKm;
     panels.push(`
       <section class="fold fold-compostela${complete ? " is-open" : ""}"
                aria-label="Compostela virtuelle">
@@ -249,18 +272,13 @@
         <p class="fold-overline">Compostela</p>
         <h3>${complete ? "Chemin accompli" : "Scellée"}</h3>
         <p class="fold-note">${complete
-          ? "Les 60 tampons sont réunis. Le chemin de Rome à Santiago est achevé."
-          : `Elle se délivre au 60ᵉ tampon, à Santiago. Il en reste ${D.stampCount - earned}.`}</p>
+          ? "Le chemin de Rome à Santiago est achevé."
+          : "Elle se délivre à l’arrivée réelle à Santiago."}</p>
         <span class="wax" aria-hidden="true"><span>${SHELL_SVG}</span></span>
       </section>`);
 
     host.innerHTML = panels.join("");
-
-    $("[data-stamp-count]").textContent = String(earned);
-    $("[data-stamp-total]").textContent = String(D.stampCount);
-    $("[data-next-stamp]").innerHTML = nextStamp
-      ? `Prochain tampon à <strong>${nf(nextStamp.km, 0)} km</strong> — ${nearing.name} — encore ${nf(nextStamp.km - km)} km`
-      : "Tous les tampons sont réunis";
+    $("[data-stamp-label]").textContent = `${earned} tampon${earned > 1 ? "s" : ""} obtenu${earned > 1 ? "s" : ""}`;
   }
 
   /* ---- comparateur avant / après --------------------------------------------
@@ -347,7 +365,7 @@
     const name = nearing.name;
     const story = D.stories[name] || null;
     const leg = (D.legs || []).find((l) => {
-      const to = (D.route.find((s) => s.name === l.to) || {}).km ?? 0;
+      const to = (D.placeByName(l.to) || {}).km ?? 0;
       return nearing.km <= to;
     });
 
@@ -435,7 +453,7 @@
   renderMode();
   renderHeader();
   renderLegs();
-  renderCompagnons();
+  renderDaily();
   renderCredential();
   renderSheet();
   renderTransformation();
