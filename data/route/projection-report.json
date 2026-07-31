@@ -1,0 +1,998 @@
+{
+  "schema": "camino-virtuel/projection-report@1",
+  "generated_at": "2026-07-31T13:59:11.574Z",
+  "source_route": "data/route/master-route.geojson",
+  "total_km": 2796.42,
+  "method": "projection perpendiculaire sur la polyligne (jamais à vol d'oiseau), route_km interpolé entre les sommets encadrant le point de projection",
+  "thresholds_m": {
+    "ok": 1000,
+    "a_verifier": 5000
+  },
+  "summary": {
+    "total": 89,
+    "ok": 67,
+    "a_verifier": 10,
+    "hors_trace_probable": 12
+  },
+  "cities": [
+    {
+      "name": "Rome",
+      "country": "IT",
+      "input_coords": [
+        41.9028,
+        12.4964
+      ],
+      "projected_km": 0.271,
+      "projection_distance_m": 3211.6,
+      "status": "a_verifier"
+    },
+    {
+      "name": "Monte Mario",
+      "country": "IT",
+      "input_coords": [
+        41.9192,
+        12.4504
+      ],
+      "projected_km": 4.331,
+      "projection_distance_m": 286.7,
+      "status": "ok"
+    },
+    {
+      "name": "La Giustiniana",
+      "country": "IT",
+      "input_coords": [
+        41.9652,
+        12.4073
+      ],
+      "projected_km": 14.35,
+      "projection_distance_m": 1495.4,
+      "status": "a_verifier"
+    },
+    {
+      "name": "La Storta",
+      "country": "IT",
+      "input_coords": [
+        42.0018,
+        12.3789
+      ],
+      "projected_km": 19.736,
+      "projection_distance_m": 308.2,
+      "status": "ok"
+    },
+    {
+      "name": "Isola Farnese",
+      "country": "IT",
+      "input_coords": [
+        42.0215,
+        12.3763
+      ],
+      "projected_km": 21.323,
+      "projection_distance_m": 635.5,
+      "status": "ok"
+    },
+    {
+      "name": "Formello",
+      "country": "IT",
+      "input_coords": [
+        42.0783,
+        12.4
+      ],
+      "projected_km": 33.324,
+      "projection_distance_m": 39.6,
+      "status": "ok"
+    },
+    {
+      "name": "Campagnano di Roma",
+      "country": "IT",
+      "input_coords": [
+        42.1354,
+        12.3749
+      ],
+      "projected_km": 41.746,
+      "projection_distance_m": 564.4,
+      "status": "ok"
+    },
+    {
+      "name": "Nepi",
+      "country": "IT",
+      "input_coords": [
+        42.2422,
+        12.3467
+      ],
+      "projected_km": 51.401,
+      "projection_distance_m": 4799.9,
+      "status": "a_verifier"
+    },
+    {
+      "name": "Sutri",
+      "country": "IT",
+      "input_coords": [
+        42.247,
+        12.2168
+      ],
+      "projected_km": 67.69,
+      "projection_distance_m": 701.9,
+      "status": "ok"
+    },
+    {
+      "name": "Capranica",
+      "country": "IT",
+      "input_coords": [
+        42.2556,
+        12.1739
+      ],
+      "projected_km": 73.948,
+      "projection_distance_m": 233.1,
+      "status": "ok"
+    },
+    {
+      "name": "Vetralla",
+      "country": "IT",
+      "input_coords": [
+        42.3198,
+        12.0543
+      ],
+      "projected_km": 90.016,
+      "projection_distance_m": 96.6,
+      "status": "ok"
+    },
+    {
+      "name": "Viterbe",
+      "country": "IT",
+      "input_coords": [
+        42.4207,
+        12.1077
+      ],
+      "projected_km": 112.471,
+      "projection_distance_m": 261,
+      "status": "ok"
+    },
+    {
+      "name": "Montefiascone",
+      "country": "IT",
+      "input_coords": [
+        42.5393,
+        12.0316
+      ],
+      "projected_km": 130.112,
+      "projection_distance_m": 61.5,
+      "status": "ok"
+    },
+    {
+      "name": "Bolsena",
+      "country": "IT",
+      "input_coords": [
+        42.644,
+        11.9858
+      ],
+      "projected_km": 146.638,
+      "projection_distance_m": 122.9,
+      "status": "ok"
+    },
+    {
+      "name": "Acquapendente",
+      "country": "IT",
+      "input_coords": [
+        42.7424,
+        11.8687
+      ],
+      "projected_km": 169.467,
+      "projection_distance_m": 27.6,
+      "status": "ok"
+    },
+    {
+      "name": "Radicofani",
+      "country": "IT",
+      "input_coords": [
+        42.8954,
+        11.7675
+      ],
+      "projected_km": 193.17,
+      "projection_distance_m": 119.6,
+      "status": "ok"
+    },
+    {
+      "name": "San Quirico d’Orcia",
+      "country": "IT",
+      "input_coords": [
+        43.0578,
+        11.604
+      ],
+      "projected_km": 226.331,
+      "projection_distance_m": 100.6,
+      "status": "ok"
+    },
+    {
+      "name": "Buonconvento",
+      "country": "IT",
+      "input_coords": [
+        43.1372,
+        11.4817
+      ],
+      "projected_km": 248.635,
+      "projection_distance_m": 39.3,
+      "status": "ok"
+    },
+    {
+      "name": "Sienne",
+      "country": "IT",
+      "input_coords": [
+        43.3188,
+        11.3308
+      ],
+      "projected_km": 279.57,
+      "projection_distance_m": 51.9,
+      "status": "ok"
+    },
+    {
+      "name": "Monteriggioni",
+      "country": "IT",
+      "input_coords": [
+        43.3897,
+        11.2233
+      ],
+      "projected_km": 300.073,
+      "projection_distance_m": 35.7,
+      "status": "ok"
+    },
+    {
+      "name": "San Gimignano",
+      "country": "IT",
+      "input_coords": [
+        43.4676,
+        11.043
+      ],
+      "projected_km": 330.86,
+      "projection_distance_m": 34.9,
+      "status": "ok"
+    },
+    {
+      "name": "Altopascio",
+      "country": "IT",
+      "input_coords": [
+        43.8139,
+        10.6772
+      ],
+      "projected_km": 397.036,
+      "projection_distance_m": 76,
+      "status": "ok"
+    },
+    {
+      "name": "Lucques",
+      "country": "IT",
+      "input_coords": [
+        43.8429,
+        10.5027
+      ],
+      "projected_km": 415.697,
+      "projection_distance_m": 23.4,
+      "status": "ok"
+    },
+    {
+      "name": "Aulla",
+      "country": "IT",
+      "input_coords": [
+        44.2062,
+        9.9675
+      ],
+      "projected_km": 497.927,
+      "projection_distance_m": 10765.1,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Sarzana",
+      "country": "IT",
+      "input_coords": [
+        44.1122,
+        9.9636
+      ],
+      "projected_km": 495.109,
+      "projection_distance_m": 2343.3,
+      "status": "a_verifier"
+    },
+    {
+      "name": "La Spezia",
+      "country": "IT",
+      "input_coords": [
+        44.1024,
+        9.8241
+      ],
+      "projected_km": 510.095,
+      "projection_distance_m": 2642.4,
+      "status": "a_verifier"
+    },
+    {
+      "name": "Rapallo",
+      "country": "IT",
+      "input_coords": [
+        44.3497,
+        9.2297
+      ],
+      "projected_km": 592.811,
+      "projection_distance_m": 63.1,
+      "status": "ok"
+    },
+    {
+      "name": "Gênes",
+      "country": "IT",
+      "input_coords": [
+        44.4056,
+        8.9463
+      ],
+      "projected_km": 625.761,
+      "projection_distance_m": 156.4,
+      "status": "ok"
+    },
+    {
+      "name": "Savone",
+      "country": "IT",
+      "input_coords": [
+        44.3091,
+        8.4772
+      ],
+      "projected_km": 674.805,
+      "projection_distance_m": 377.8,
+      "status": "ok"
+    },
+    {
+      "name": "Finale Ligure",
+      "country": "IT",
+      "input_coords": [
+        44.1697,
+        8.3436
+      ],
+      "projected_km": 707.914,
+      "projection_distance_m": 1250,
+      "status": "a_verifier"
+    },
+    {
+      "name": "Albenga",
+      "country": "IT",
+      "input_coords": [
+        44.049,
+        8.2127
+      ],
+      "projected_km": 732.287,
+      "projection_distance_m": 57,
+      "status": "ok"
+    },
+    {
+      "name": "Imperia",
+      "country": "IT",
+      "input_coords": [
+        43.8878,
+        8.0289
+      ],
+      "projected_km": 767.898,
+      "projection_distance_m": 1001,
+      "status": "a_verifier"
+    },
+    {
+      "name": "San Remo",
+      "country": "IT",
+      "input_coords": [
+        43.8159,
+        7.7761
+      ],
+      "projected_km": 811.562,
+      "projection_distance_m": 153.7,
+      "status": "ok"
+    },
+    {
+      "name": "Vintimille",
+      "country": "IT",
+      "input_coords": [
+        43.7912,
+        7.6083
+      ],
+      "projected_km": 828.297,
+      "projection_distance_m": 27.8,
+      "status": "ok"
+    },
+    {
+      "name": "Menton",
+      "country": "FR",
+      "input_coords": [
+        43.775,
+        7.4975
+      ],
+      "projected_km": 840.442,
+      "projection_distance_m": 287.7,
+      "status": "ok"
+    },
+    {
+      "name": "Monaco",
+      "country": "FR",
+      "input_coords": [
+        43.7384,
+        7.4246
+      ],
+      "projected_km": 852.452,
+      "projection_distance_m": 2232.4,
+      "status": "a_verifier"
+    },
+    {
+      "name": "Nice",
+      "country": "FR",
+      "input_coords": [
+        43.7102,
+        7.262
+      ],
+      "projected_km": 876.261,
+      "projection_distance_m": 6418.7,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Antibes",
+      "country": "FR",
+      "input_coords": [
+        43.5808,
+        7.1251
+      ],
+      "projected_km": 914.198,
+      "projection_distance_m": 8522.5,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Cannes",
+      "country": "FR",
+      "input_coords": [
+        43.5528,
+        7.0174
+      ],
+      "projected_km": 935.394,
+      "projection_distance_m": 5675.7,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Fréjus",
+      "country": "FR",
+      "input_coords": [
+        43.4332,
+        6.737
+      ],
+      "projected_km": 979.645,
+      "projection_distance_m": 165.5,
+      "status": "ok"
+    },
+    {
+      "name": "Brignoles",
+      "country": "FR",
+      "input_coords": [
+        43.4058,
+        6.0616
+      ],
+      "projected_km": 1064.065,
+      "projection_distance_m": 3371.7,
+      "status": "a_verifier"
+    },
+    {
+      "name": "Saint-Maximin",
+      "country": "FR",
+      "input_coords": [
+        43.4525,
+        5.8619
+      ],
+      "projected_km": 1091.42,
+      "projection_distance_m": 51.8,
+      "status": "ok"
+    },
+    {
+      "name": "Aix-en-Provence",
+      "country": "FR",
+      "input_coords": [
+        43.5297,
+        5.4474
+      ],
+      "projected_km": 1137.482,
+      "projection_distance_m": 323.6,
+      "status": "ok"
+    },
+    {
+      "name": "Salon-de-Provence",
+      "country": "FR",
+      "input_coords": [
+        43.6406,
+        5.0975
+      ],
+      "projected_km": 1177.992,
+      "projection_distance_m": 142.1,
+      "status": "ok"
+    },
+    {
+      "name": "Arles",
+      "country": "FR",
+      "input_coords": [
+        43.6766,
+        4.6278
+      ],
+      "projected_km": 1230.102,
+      "projection_distance_m": 2.3,
+      "status": "ok"
+    },
+    {
+      "name": "Saint-Gilles",
+      "country": "FR",
+      "input_coords": [
+        43.6766,
+        4.4307
+      ],
+      "projected_km": 1252.597,
+      "projection_distance_m": 6.5,
+      "status": "ok"
+    },
+    {
+      "name": "Lunel",
+      "country": "FR",
+      "input_coords": [
+        43.6772,
+        4.1361
+      ],
+      "projected_km": 1284.767,
+      "projection_distance_m": 4405,
+      "status": "a_verifier"
+    },
+    {
+      "name": "Montpellier",
+      "country": "FR",
+      "input_coords": [
+        43.6108,
+        3.8767
+      ],
+      "projected_km": 1324.637,
+      "projection_distance_m": 33.2,
+      "status": "ok"
+    },
+    {
+      "name": "Béziers",
+      "country": "FR",
+      "input_coords": [
+        43.3442,
+        3.2158
+      ],
+      "projected_km": 1460.786,
+      "projection_distance_m": 36792.5,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Narbonne",
+      "country": "FR",
+      "input_coords": [
+        43.1839,
+        3.0036
+      ],
+      "projected_km": 1497.868,
+      "projection_distance_m": 51485.2,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Carcassonne",
+      "country": "FR",
+      "input_coords": [
+        43.213,
+        2.351
+      ],
+      "projected_km": 1592.419,
+      "projection_distance_m": 34898.7,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Castelnaudary",
+      "country": "FR",
+      "input_coords": [
+        43.3181,
+        1.9506
+      ],
+      "projected_km": 1624.558,
+      "projection_distance_m": 8722.9,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Toulouse",
+      "country": "FR",
+      "input_coords": [
+        43.6047,
+        1.4442
+      ],
+      "projected_km": 1690.78,
+      "projection_distance_m": 473.1,
+      "status": "ok"
+    },
+    {
+      "name": "Gimont",
+      "country": "FR",
+      "input_coords": [
+        43.6272,
+        0.8756
+      ],
+      "projected_km": 1754.088,
+      "projection_distance_m": 459.6,
+      "status": "ok"
+    },
+    {
+      "name": "Auch",
+      "country": "FR",
+      "input_coords": [
+        43.6454,
+        0.5867
+      ],
+      "projected_km": 1787.001,
+      "projection_distance_m": 135.8,
+      "status": "ok"
+    },
+    {
+      "name": "Maubourguet",
+      "country": "FR",
+      "input_coords": [
+        43.469,
+        0.035
+      ],
+      "projected_km": 1859.739,
+      "projection_distance_m": 26.4,
+      "status": "ok"
+    },
+    {
+      "name": "Aire-sur-l’Adour",
+      "country": "FR",
+      "input_coords": [
+        43.7,
+        -0.2664
+      ],
+      "projected_km": 1867.222,
+      "projection_distance_m": 32832.8,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Arzacq-Arraziguet",
+      "country": "FR",
+      "input_coords": [
+        43.5357,
+        -0.413
+      ],
+      "projected_km": 1905.977,
+      "projection_distance_m": 21535,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Orthez",
+      "country": "FR",
+      "input_coords": [
+        43.488,
+        -0.773
+      ],
+      "projected_km": 1971.214,
+      "projection_distance_m": 25823.9,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Navarrenx",
+      "country": "FR",
+      "input_coords": [
+        43.3236,
+        -0.7592
+      ],
+      "projected_km": 1971.202,
+      "projection_distance_m": 7740.6,
+      "status": "hors_trace_probable"
+    },
+    {
+      "name": "Saint-Jean-Pied-de-Port",
+      "country": "FR",
+      "input_coords": [
+        43.1632,
+        -1.2379
+      ],
+      "projected_km": 2028.75,
+      "projection_distance_m": 86.9,
+      "status": "ok"
+    },
+    {
+      "name": "Roncevaux",
+      "country": "ES",
+      "input_coords": [
+        43.009,
+        -1.319
+      ],
+      "projected_km": 2052.834,
+      "projection_distance_m": 5.5,
+      "status": "ok"
+    },
+    {
+      "name": "Pampelune",
+      "country": "ES",
+      "input_coords": [
+        42.8125,
+        -1.6458
+      ],
+      "projected_km": 2095.521,
+      "projection_distance_m": 551.6,
+      "status": "ok"
+    },
+    {
+      "name": "Puente la Reina",
+      "country": "ES",
+      "input_coords": [
+        42.6722,
+        -1.8144
+      ],
+      "projected_km": 2118.935,
+      "projection_distance_m": 5.8,
+      "status": "ok"
+    },
+    {
+      "name": "Estella",
+      "country": "ES",
+      "input_coords": [
+        42.671,
+        -2.032
+      ],
+      "projected_km": 2140.695,
+      "projection_distance_m": 278.7,
+      "status": "ok"
+    },
+    {
+      "name": "Los Arcos",
+      "country": "ES",
+      "input_coords": [
+        42.5686,
+        -2.1925
+      ],
+      "projected_km": 2161.982,
+      "projection_distance_m": 56.4,
+      "status": "ok"
+    },
+    {
+      "name": "Logroño",
+      "country": "ES",
+      "input_coords": [
+        42.4627,
+        -2.4449
+      ],
+      "projected_km": 2189.847,
+      "projection_distance_m": 563.7,
+      "status": "ok"
+    },
+    {
+      "name": "Nájera",
+      "country": "ES",
+      "input_coords": [
+        42.418,
+        -2.728
+      ],
+      "projected_km": 2217.91,
+      "projection_distance_m": 1.2,
+      "status": "ok"
+    },
+    {
+      "name": "Santo Domingo",
+      "country": "ES",
+      "input_coords": [
+        42.441,
+        -2.953
+      ],
+      "projected_km": 2239.517,
+      "projection_distance_m": 8.8,
+      "status": "ok"
+    },
+    {
+      "name": "Belorado",
+      "country": "ES",
+      "input_coords": [
+        42.42,
+        -3.1919
+      ],
+      "projected_km": 2262.166,
+      "projection_distance_m": 70.7,
+      "status": "ok"
+    },
+    {
+      "name": "Burgos",
+      "country": "ES",
+      "input_coords": [
+        42.3439,
+        -3.6969
+      ],
+      "projected_km": 2311.081,
+      "projection_distance_m": 115.5,
+      "status": "ok"
+    },
+    {
+      "name": "Frómista",
+      "country": "ES",
+      "input_coords": [
+        42.267,
+        -4.406
+      ],
+      "projected_km": 2376.975,
+      "projection_distance_m": 87.8,
+      "status": "ok"
+    },
+    {
+      "name": "Carrión de los Condes",
+      "country": "ES",
+      "input_coords": [
+        42.3372,
+        -4.6031
+      ],
+      "projected_km": 2395.809,
+      "projection_distance_m": 31.7,
+      "status": "ok"
+    },
+    {
+      "name": "Sahagún",
+      "country": "ES",
+      "input_coords": [
+        42.372,
+        -5.03
+      ],
+      "projected_km": 2435.729,
+      "projection_distance_m": 139.4,
+      "status": "ok"
+    },
+    {
+      "name": "Mansilla de las Mulas",
+      "country": "ES",
+      "input_coords": [
+        42.4989,
+        -5.4172
+      ],
+      "projected_km": 2472.178,
+      "projection_distance_m": 2.4,
+      "status": "ok"
+    },
+    {
+      "name": "León",
+      "country": "ES",
+      "input_coords": [
+        42.5987,
+        -5.5671
+      ],
+      "projected_km": 2490.873,
+      "projection_distance_m": 30.4,
+      "status": "ok"
+    },
+    {
+      "name": "Hospital de Órbigo",
+      "country": "ES",
+      "input_coords": [
+        42.4636,
+        -5.8811
+      ],
+      "projected_km": 2523.1,
+      "projection_distance_m": 17.6,
+      "status": "ok"
+    },
+    {
+      "name": "Astorga",
+      "country": "ES",
+      "input_coords": [
+        42.455,
+        -6.052
+      ],
+      "projected_km": 2538.815,
+      "projection_distance_m": 87.9,
+      "status": "ok"
+    },
+    {
+      "name": "Ponferrada",
+      "country": "ES",
+      "input_coords": [
+        42.546,
+        -6.596
+      ],
+      "projected_km": 2592.286,
+      "projection_distance_m": 215.1,
+      "status": "ok"
+    },
+    {
+      "name": "Villafranca del Bierzo",
+      "country": "ES",
+      "input_coords": [
+        42.6064,
+        -6.8092
+      ],
+      "projected_km": 2615.05,
+      "projection_distance_m": 135.2,
+      "status": "ok"
+    },
+    {
+      "name": "O Cebreiro",
+      "country": "ES",
+      "input_coords": [
+        42.708,
+        -7.043
+      ],
+      "projected_km": 2642.909,
+      "projection_distance_m": 54.3,
+      "status": "ok"
+    },
+    {
+      "name": "Triacastela",
+      "country": "ES",
+      "input_coords": [
+        42.7561,
+        -7.2378
+      ],
+      "projected_km": 2663.72,
+      "projection_distance_m": 3,
+      "status": "ok"
+    },
+    {
+      "name": "Sarria",
+      "country": "ES",
+      "input_coords": [
+        42.779,
+        -7.414
+      ],
+      "projected_km": 2681.663,
+      "projection_distance_m": 183.7,
+      "status": "ok"
+    },
+    {
+      "name": "Portomarín",
+      "country": "ES",
+      "input_coords": [
+        42.806,
+        -7.616
+      ],
+      "projected_km": 2703.803,
+      "projection_distance_m": 49.1,
+      "status": "ok"
+    },
+    {
+      "name": "Palas de Rei",
+      "country": "ES",
+      "input_coords": [
+        42.874,
+        -7.868
+      ],
+      "projected_km": 2728.756,
+      "projection_distance_m": 114.5,
+      "status": "ok"
+    },
+    {
+      "name": "Melide",
+      "country": "ES",
+      "input_coords": [
+        42.914,
+        -8.014
+      ],
+      "projected_km": 2743.328,
+      "projection_distance_m": 23.7,
+      "status": "ok"
+    },
+    {
+      "name": "Arzúa",
+      "country": "ES",
+      "input_coords": [
+        42.928,
+        -8.164
+      ],
+      "projected_km": 2757.75,
+      "projection_distance_m": 196.3,
+      "status": "ok"
+    },
+    {
+      "name": "O Pedrouzo",
+      "country": "ES",
+      "input_coords": [
+        42.9058,
+        -8.3644
+      ],
+      "projected_km": 2777.026,
+      "projection_distance_m": 156.4,
+      "status": "ok"
+    },
+    {
+      "name": "Santiago",
+      "country": "ES",
+      "input_coords": [
+        42.8782,
+        -8.5448
+      ],
+      "projected_km": 2796.417,
+      "projection_distance_m": 265.2,
+      "status": "ok"
+    }
+  ]
+}
