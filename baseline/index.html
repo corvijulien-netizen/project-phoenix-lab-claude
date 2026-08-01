@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f2ead9">
+  <meta name="description" content="Camino Virtuel — je marche réellement autour de chez moi et chaque kilomètre me fait avancer de Rome à Santiago.">
+  <title>Camino Virtuel — Rome → Santiago</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="lab.css?v=4">
+</head>
+<body>
+  <div class="paper-noise" aria-hidden="true"></div>
+
+  <aside class="sidebar" aria-label="Navigation principale">
+    <a class="brand" href="#dashboard" aria-label="Camino Virtuel — Accueil">
+      <span class="brand-mark" aria-hidden="true">
+        <img src="assets/shell-logo.png?v=4" alt="">
+      </span>
+      <span class="brand-copy">
+        <span class="brand-name">Camino<br>Virtuel</span>
+        <span class="brand-tagline">Rome → Santiago</span>
+      </span>
+    </a>
+
+    <div class="sidebar-rule" aria-hidden="true"></div>
+
+    <nav class="nav-list">
+      <a class="nav-link is-active" href="#dashboard" data-nav="dashboard">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5M5.5 9.5V21h13V9.5M9.5 21v-7h5v7"></path></svg>
+        <span>Tableau de bord</span>
+      </a>
+      <a class="nav-link" href="#chemin" data-nav="chemin">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21c0-3 3-3 3-6s-3-3-3-6 3-3 3-6M16 3h3v3M16 10h3v3M13 17h3v3"></path></svg>
+        <span>Le chemin</span>
+      </a>
+      <a class="nav-link" href="#carte" data-nav="carte">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3ZM9 3v15M15 6v15"></path></svg>
+        <span>Carte</span>
+      </a>
+      <button class="nav-link" type="button" data-open-passport>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H11a3 3 0 0 1 3 3v17a3 3 0 0 0-3-3H6.5A2.5 2.5 0 0 0 4 21.5ZM20 4.5A2.5 2.5 0 0 0 17.5 2H14v20a3 3 0 0 1 3-3h.5a2.5 2.5 0 0 1 2.5 2.5Z"></path></svg>
+        <span>Le crédential</span>
+      </button>
+      <button class="nav-link" type="button" data-coming-soon="Activité">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20c0-4 3-5 3-8s-2-4-2-6c0-2 2-3 4-2 3 1 5 5 4 8-1 4-4 7-9 8ZM5 6h3M4 10h4M14 4l3-2M17 7l3-1"></path></svg>
+        <span>Activité</span>
+      </button>
+      <button class="nav-link" type="button" data-coming-soon="Nutrition">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4C11 4 5 9 5 16c0 2 1 4 3 5 1-8 5-12 12-17ZM5 21c2-5 6-8 11-10"></path></svg>
+        <span>Nutrition</span>
+      </button>
+      <button class="nav-link" type="button" data-coming-soon="Sommeil">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5a9 9 0 1 0 12 12Z"></path></svg>
+        <span>Sommeil</span>
+      </button>
+      <button class="nav-link" type="button" data-coming-soon="Journal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h12a2 2 0 0 1 2 2v16H7a2 2 0 0 1-2-2ZM5 17h14M9 7h6M9 11h6"></path></svg>
+        <span>Journal</span>
+      </button>
+      <button class="nav-link" type="button" data-coming-soon="Réglages">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path></svg>
+        <span>Réglages</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-landscape" aria-hidden="true">
+      <svg viewBox="0 0 200 175">
+        <path class="wash" d="M3 147c20-38 39-59 62-54 21 4 21-28 44-32 31-5 42 26 66 23 13-1 20 12 22 29v50H3Z"></path>
+        <path d="m7 139 35-31 21 17 37-48 29 31 20-18 42 45M18 148h166M38 147v-24h30v24m-24-25v-9h18v9m14 25v-32h34v32m-25-32v-10h16v10"></path>
+        <path class="tree" d="M25 147V73m0 8-13 26 13-10 13 10-13-26m0 13-17 29 17-12 17 12-17-29"></path>
+      </svg>
+    </div>
+  </aside>
+
+  <main class="app-shell" id="dashboard">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Le pèlerinage continue, autrement</p>
+        <h1>Camino Virtuel</h1>
+        <p class="camino-motto">Mes pas sont réels. Le voyage est virtuel.</p>
+      </div>
+      <div class="topbar-status">
+        <span class="lab-chip">LAB · DÉMO</span>
+        <div class="distance-counter">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21c0-3 3-3 3-6s-3-3-3-6 3-3 3-6M16 3h3v3M16 10h3v3M13 17h3v3"></path></svg>
+          <span><strong data-distance>18,6</strong> / 3 000 km</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="journey-grid" id="chemin" aria-label="Progression du Camino Virtuel">
+      <article class="map-card" id="carte">
+        <div class="map-heading">
+          <span>ROME</span>
+          <span class="route-arrow">→</span>
+          <span>SANTIAGO</span>
+        </div>
+        <svg class="camino-map legacy-map" viewBox="0 0 1000 650" role="img" aria-labelledby="map-title map-desc">
+          <title id="map-title">Carte illustrée du Camino Virtuel de Rome à Santiago</title>
+          <desc id="map-desc">Le tracé traverse l’Italie, le sud de la France et le nord de l’Espagne. La portion Rome-La Storta est parcourue.</desc>
+          <defs>
+            <filter id="paperShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#64411c" flood-opacity=".14"></feDropShadow>
+            </filter>
+            <filter id="glow" x="-200%" y="-200%" width="500%" height="500%">
+              <feGaussianBlur stdDeviation="7" result="blur"></feGaussianBlur>
+              <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+            </filter>
+            <pattern id="topo" width="60" height="38" patternUnits="userSpaceOnUse">
+              <path d="M-10 20C5 4 18 3 31 15s25 12 39-2" fill="none" stroke="#8f7959" stroke-width=".7" opacity=".16"></path>
+              <path d="M-9 29C7 13 19 13 32 24s25 11 38-2" fill="none" stroke="#8f7959" stroke-width=".55" opacity=".12"></path>
+            </pattern>
+          </defs>
+
+          <rect width="1000" height="650" fill="#d9ddd3"></rect>
+          <rect width="1000" height="650" fill="url(#topo)"></rect>
+
+          <path class="land" d="M-30 63C79 57 132 81 196 128c54 40 100 42 162 46 77 5 137-24 206-52 81-33 162-27 236 7 61 27 107 15 150-8 22-12 54 4 76 23v360c-34 20-68 18-105 1-69-32-121-8-178 21-65 34-130 22-179-15-55-42-107-50-171-16-76 41-144 45-206 9-78-45-137-44-217-5Z"></path>
+          <path class="coastline" d="M-30 63C79 57 132 81 196 128c54 40 100 42 162 46 77 5 137-24 206-52 81-33 162-27 236 7 61 27 107 15 150-8 22-12 54 4 76 23M-30 504c80-39 139-40 217 5 62 36 130 32 206-9 64-34 116-26 171 16 49 37 114 49 179 15 57-29 109-53 178-21 37 17 71 19 105-1"></path>
+
+          <g class="mountains" aria-hidden="true">
+            <path d="m111 375 21-31 20 31m-5 0 29-45 31 45m-6 0 22-34 23 34m13-141 24-36 25 36m-7 0 34-52 38 52m-10 0 25-38 27 38m84-81 22-34 24 34m-6 0 32-49 36 49m-8 0 23-34 25 34"></path>
+            <path d="m541 162 19-28 19 28m10 0 29-44 31 44m102 31 24-35 25 35m5 0 30-46 33 46"></path>
+          </g>
+
+          <g class="terrain-lines" aria-hidden="true">
+            <path d="M38 217c106-56 199-37 289-5s171 29 264-25 190-71 351-21M8 454c117-60 217-52 300-11s181 37 266-9 195-69 380-12"></path>
+            <path d="M80 188c70-33 130-35 181-13M617 482c80-41 169-45 279-9"></path>
+          </g>
+
+          <path class="route-halo" d="M879 370C838 355 815 342 779 337C708 324 666 298 592 288C532 280 481 313 425 318C362 324 320 343 274 344C212 345 161 317 92 310"></path>
+          <path class="route-line" d="M879 370C838 355 815 342 779 337C708 324 666 298 592 288C532 280 481 313 425 318C362 324 320 343 274 344C212 345 161 317 92 310"></path>
+          <path class="route-progress" d="M879 370C838 355 815 342 779 337"></path>
+
+          <g class="map-stop">
+            <circle cx="879" cy="370" r="10"></circle><circle cx="879" cy="370" r="4"></circle>
+            <text x="896" y="378">ROME</text>
+          </g>
+          <g class="map-stop current-stop">
+            <circle cx="779" cy="337" r="18" class="pulse"></circle>
+            <circle cx="779" cy="337" r="10"></circle><circle cx="779" cy="337" r="4"></circle>
+            <path class="pin" d="M779 302c-9 0-16 7-16 16 0 12 16 27 16 27s16-15 16-27c0-9-7-16-16-16Zm0 22a6 6 0 1 1 0-12 6 6 0 0 1 0 12Z"></path>
+            <text x="803" y="330">La Storta</text>
+            <text class="map-km" x="803" y="349">18,6 km</text>
+          </g>
+          <g class="map-stop"><circle cx="592" cy="288" r="7"></circle><text x="575" y="269">Arles</text></g>
+          <g class="map-stop"><circle cx="425" cy="318" r="7"></circle><text x="393" y="298">Toulouse</text></g>
+          <g class="map-stop"><circle cx="274" cy="344" r="7"></circle><text x="247" y="319">Saint-Jean-</text><text x="247" y="337">Pied-de-Port</text></g>
+          <g class="map-stop"><circle cx="92" cy="310" r="10"></circle><circle cx="92" cy="310" r="4"></circle><text x="80" y="284">SANTIAGO</text></g>
+
+          <g class="shell-compass" transform="translate(735 468)" aria-label="Coquille Saint-Jacques, symbole du chemin">
+            <circle cx="64" cy="64" r="58"></circle>
+            <circle cx="64" cy="64" r="43"></circle>
+            <path d="M64 0v22M64 106v22M0 64h22M106 64h22M14 14l16 16M98 98l16 16M114 14 98 30M30 98l-16 16"></path>
+            <text x="60" y="-7">N</text>
+            <path class="shell" d="M64 95C39 87 27 62 36 40c4-10 15-13 28-4 13-9 24-6 28 4 9 22-3 47-28 55Zm0-56v51M47 39l12 51M81 39 69 90M37 47l17 45M91 47 74 92M34 58l15 32M94 58 79 90"></path>
+          </g>
+
+          <g class="map-plaque" filter="url(#paperShadow)" transform="translate(38 456)">
+            <rect width="355" height="132" rx="10"></rect>
+            <text class="plaque-title" x="30" y="48">ROME → SANTIAGO</text>
+            <text class="plaque-km" x="30" y="88">≈ 3 000 KM SELON LE TRACÉ</text>
+            <text class="plaque-note" x="30" y="111">Mes pas sont réels. Le voyage est virtuel.</text>
+          </g>
+        </svg>
+
+        <div id="camino-map" class="camino-map interactive-map" role="application" aria-label="Carte interactive et zoomable du Camino Virtuel de Rome à Santiago"></div>
+        <div class="map-actions" aria-label="Commandes de la carte">
+          <button type="button" data-map-overview title="Afficher tout le chemin">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3ZM9 3v15M15 6v15"></path></svg>
+            <span>Tout le chemin</span>
+          </button>
+          <button type="button" data-map-focus title="Centrer sur ma position">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="8"></circle><path d="M12 2V5M12 19v3M2 12h3M19 12h3"></path></svg>
+            <span>Ma position</span>
+          </button>
+        </div>
+        <div class="map-plaque-html" aria-hidden="true">
+          <strong>Rome → Santiago</strong>
+          <span>≈ 3 000 km selon le tracé</span>
+        </div>
+        <div class="map-shell-watermark" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42"></circle>
+            <path d="M50 78C30 72 22 52 30 35c3-8 11-9 20-2 9-7 17-6 20 2 8 17 0 37-20 43ZM50 34v40M36 35l10 39M64 35 54 74M28 42l14 31M72 42 58 73M26 53l12 18M74 53 62 71"></path>
+            <path d="M50 1v17M50 82v17M1 50h17M82 50h17"></path>
+          </svg>
+        </div>
+        <div class="map-mobile-progress">
+          <span>Rome</span>
+          <span class="mini-track"><i></i></span>
+          <span>Santiago</span>
+        </div>
+      </article>
+
+      <article class="stage-card" aria-labelledby="stage-title">
+        <p class="section-kicker">L’étape virtuelle du jour</p>
+        <div class="short-rule" aria-hidden="true"></div>
+        <h2 id="stage-title">La Storta</h2>
+        <div class="today-distance">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+          <strong>11,2</strong> km aujourd’hui
+        </div>
+        <div class="short-rule" aria-hidden="true"></div>
+
+        <div class="total-distance">
+          <strong><span data-distance>18,6</span> <small>km</small></strong>
+          <span>parcourus</span>
+        </div>
+        <div class="progress-track" aria-label="18,6 kilomètres parcourus sur 3 000">
+          <span style="width: .62%"></span>
+          <i class="first-steps" aria-hidden="true"></i>
+        </div>
+        <div class="progress-legend">
+          <span>Rome</span>
+          <span>3 000 km</span>
+        </div>
+
+        <div class="next-stop">
+          <span>Prochaine étape</span>
+          <strong>Isola Farnese</strong>
+          <small>Encore 9,4 km sur le tracé</small>
+        </div>
+        <div class="stage-photo" role="img" aria-label="Illustration aquarelle d’un chemin près de La Storta">
+          <img data-stage-image alt="Chemin de pierres et maisons anciennes près de La Storta, illustration aquarelle">
+          <span class="photo-caption">Aux portes de Rome · Via Francigena</span>
+        </div>
+        <button class="primary-button" type="button" data-open-stage>
+          <span>Découvrir l’étape</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </button>
+      </article>
+    </section>
+
+    <section class="pilgrim-note" aria-labelledby="pilgrim-note-title">
+      <span class="pilgrim-note-shell" aria-hidden="true">
+        <img src="assets/shell-logo.png?v=4" alt="">
+      </span>
+      <div>
+        <p class="section-kicker" id="pilgrim-note-title">Mon chemin, autrement</p>
+        <p>Cette année, je ne peux pas partir sur les chemins de Compostelle comme d’habitude. Alors je marche, sac au dos, autour de chez moi : chaque kilomètre réel me fait avancer virtuellement de Rome à Santiago.</p>
+      </div>
+    </section>
+
+    <section class="credential-section" aria-labelledby="credential-title">
+      <div class="credential-heading">
+        <div>
+          <p class="section-kicker">Credencial del peregrino</p>
+          <h2 id="credential-title">Mon crédential</h2>
+          <p>Un tampon tous les 50 km, jusqu’à la Compostela virtuelle.</p>
+        </div>
+        <div class="credential-progress" aria-label="0 tampon obtenu sur 60">
+          <strong>0 <small>/ 60</small></strong>
+          <span>Prochain tampon à 50 km · encore 31,4 km</span>
+        </div>
+      </div>
+
+      <div class="credential-fold">
+        <div class="credential-ribbon" aria-hidden="true">
+          <span>CREDENCIALIS</span>
+          <small>ROMA · SANTIAGO</small>
+        </div>
+        <div class="credential-page credential-identity">
+          <div class="credential-document-title">
+            <img src="assets/shell-logo.png?v=4" alt="">
+            <div>
+              <span>Camino Virtuel</span>
+              <strong>Carnet du pèlerin</strong>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Pèlerin</dt><dd>Julien</dd></div>
+            <div><dt>Départ</dt><dd>Rome · Italie</dd></div>
+            <div><dt>Destination</dt><dd>Santiago · Espagne</dd></div>
+            <div><dt>Distance</dt><dd>≈ 3 000 km</dd></div>
+          </dl>
+          <div class="departure-stamp" aria-label="Tampon de départ de Rome">
+            <span>ROMA</span>
+            <img src="assets/shell-logo.png?v=4" alt="">
+            <strong>PARTENZA</strong>
+            <small>CAMINO VIRTUEL</small>
+          </div>
+        </div>
+        <div class="credential-page credential-stamp-page">
+          <div class="credential-page-head">
+            <div>
+              <span>Rome → Santiago</span>
+              <strong>Visas du chemin</strong>
+            </div>
+            <small>Chaque case = 50 km réels</small>
+          </div>
+          <div class="credential-grid" data-credential-grid data-limit="8" aria-label="Aperçu des prochains tampons"></div>
+          <button class="credential-open" type="button" data-open-passport>
+            <span>Déplier les 60 tampons</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <button class="bottom-cta" type="button" data-open-stage>
+      <span>Voir l’étape du jour</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+    </button>
+
+    <footer class="site-footer">
+      <span>Données de démonstration · Phoenix Lab</span>
+      <span>Rome → Santiago · environ 3 000 km selon le tracé retenu</span>
+    </footer>
+  </main>
+
+  <dialog class="modal stage-modal" data-stage-modal>
+    <button class="modal-close" type="button" aria-label="Fermer" data-close-modal>×</button>
+    <div class="stage-modal-image">
+      <img data-stage-image alt="">
+      <span>Étape virtuelle · Km 18,6</span>
+    </div>
+    <div class="modal-content">
+      <p class="section-kicker">Sur la Via Francigena</p>
+      <h2>La Storta</h2>
+      <p class="lead">Aujourd’hui, mes 11,2 kilomètres réels me déposent virtuellement à La Storta, au nord-ouest de Rome.</p>
+      <div class="story-rule"></div>
+      <p>Ce lieu marque l’une des premières haltes symboliques du grand départ. Le paysage urbain de Rome laisse progressivement place aux chemins, aux collines et aux villages du Latium.</p>
+      <blockquote>« Le vrai voyage commence au premier pas que l’on décide de compter. »</blockquote>
+      <div class="stage-facts">
+        <span><small>Position</small><strong>18,6 km</strong></span>
+        <span><small>Aujourd’hui</small><strong>11,2 km</strong></span>
+        <span><small>Prochaine halte</small><strong>Isola Farnese</strong></span>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal passport-modal" data-passport-modal>
+    <button class="modal-close" type="button" aria-label="Fermer" data-close-modal>×</button>
+    <div class="passport-cover">
+      <span class="passport-emblem" aria-hidden="true">
+        <img src="assets/shell-logo.png?v=4" alt="">
+      </span>
+      <p>CREDENCIALIS</p>
+      <h2>Carnet du pèlerin</h2>
+      <span>Camino Virtuel · Rome → Santiago</span>
+    </div>
+    <div class="passport-pages">
+      <div class="passport-header">
+        <div>
+          <p class="section-kicker">Mes tampons</p>
+          <h3>3 000 km · 60 souvenirs</h3>
+        </div>
+        <div class="passport-total"><strong>18,6</strong><span>km parcourus</span></div>
+      </div>
+      <p class="passport-intro">Chaque tampon représente 50 kilomètres réellement marchés. Ils apparaîtront au fil des villes et des paysages traversés.</p>
+      <div class="stamp-grid" data-stamp-grid aria-label="60 emplacements de tampons"></div>
+      <div class="compostela-lock">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+        <div><strong>Compostela virtuelle</strong><span>Elle sera délivrée au 60e tampon, à Santiago.</span></div>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" role="status" aria-live="polite" data-toast></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="lab.js?v=3"></script>
+</body>
+</html>

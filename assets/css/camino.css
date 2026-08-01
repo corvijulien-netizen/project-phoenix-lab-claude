@@ -1,0 +1,893 @@
+/* ============================================================================
+   Camino Virtuel — feuille de style
+   ----------------------------------------------------------------------------
+   Registre : carnet de pèlerinage contemporain. Papier, encre, cuivre.
+   Pas d'effet néon, pas de coquille à chaque coin, pas d'avatar.
+   ========================================================================== */
+
+/* ── fontes, auto-hébergées (aucun appel à un service extérieur) ─────────── */
+@font-face{font-family:Garamond;src:url(../fonts/eb-garamond-latin-400-normal.woff2)format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Garamond;src:url(../fonts/eb-garamond-latin-400-italic.woff2)format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:Garamond;src:url(../fonts/eb-garamond-latin-500-normal.woff2)format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:Garamond;src:url(../fonts/eb-garamond-latin-600-normal.woff2)format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:Grotesk;src:url(../fonts/inter-latin-400-normal.woff2)format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Grotesk;src:url(../fonts/inter-latin-500-normal.woff2)format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:Grotesk;src:url(../fonts/inter-latin-600-normal.woff2)format("woff2");font-weight:600;font-style:normal;font-display:swap}
+
+:root{
+  color-scheme:light;
+
+  /* papier */
+  --paper:#f3ecdd;
+  --paper-warm:#efe6d3;
+  --paper-high:#faf5ea;
+  --paper-deep:#e6d9be;
+
+  /* encres */
+  --ink:#2a2620;
+  --ink-soft:#6b6151;
+  --ink-faint:#938775;
+
+  /* identité */
+  --olive:#6d7546;
+  --olive-deep:#525937;
+  --terracotta:#b04718;
+  --terracotta-deep:#8a3411;
+  --ochre:#a8752c;
+  --mineral:#39566b;
+  --sage:#879169;
+
+  /* traits */
+  --rule:#cdbb9b;
+  --rule-soft:rgba(120,94,56,.20);
+
+  --serif:Garamond,"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --sans:Grotesk,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  --lift:0 1px 2px rgba(74,50,20,.05),0 10px 30px rgba(74,50,20,.07);
+  --lift-high:0 2px 4px rgba(74,50,20,.07),0 22px 55px rgba(74,50,20,.13);
+
+  --rail-w:264px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-width:320px;
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.55;
+  background:var(--paper);
+  /* grain de papier : deux trames fines, jamais visibles isolément */
+  background-image:
+    repeating-linear-gradient(94deg,rgba(255,255,255,.5) 0 1px,transparent 1px 4px),
+    repeating-linear-gradient(4deg,rgba(122,92,48,.045) 0 1px,transparent 1px 6px),
+    radial-gradient(ellipse at 22% 8%,rgba(255,255,255,.65),transparent 55%);
+}
+
+h1,h2,h3,h4{font-family:var(--serif);font-weight:500;margin:0;line-height:1.1}
+p{margin:0}
+img{max-width:100%;display:block}
+
+:where(button,a):focus-visible{
+  outline:2.5px solid var(--terracotta);
+  outline-offset:3px;
+  border-radius:3px;
+}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:999;
+  padding:10px 16px;background:var(--ink);color:var(--paper-high);
+}
+.skip:focus{left:8px;top:8px}
+
+/* filet ornemental, réutilisé partout */
+.overline{
+  font-family:var(--sans);font-size:11px;font-weight:600;
+  letter-spacing:.19em;text-transform:uppercase;
+  color:var(--terracotta);margin:0 0 10px;
+  display:flex;align-items:center;gap:10px;
+}
+.overline::after{
+  content:"";flex:1;height:1px;max-width:64px;
+  background:linear-gradient(90deg,var(--rule),transparent);
+}
+
+/* ══ colonne de gauche ═══════════════════════════════════════════════════ */
+
+.rail{
+  position:fixed;inset:0 auto 0 0;width:var(--rail-w);z-index:900;
+  display:flex;flex-direction:column;
+  padding:26px 22px 0;
+  border-right:1px solid var(--rule-soft);
+  background:linear-gradient(180deg,rgba(250,245,234,.9),rgba(243,236,221,.82));
+  backdrop-filter:blur(14px);
+  overflow-y:auto;overflow-x:hidden;
+}
+
+.brand{display:flex;align-items:center;gap:13px;text-decoration:none;color:inherit}
+
+.brand-mark{
+  flex:0 0 54px;height:54px;display:grid;place-items:center;border-radius:50%;
+  background:radial-gradient(circle at 34% 26%,#818a55,var(--olive-deep));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),
+             inset 0 -3px 8px rgba(0,0,0,.25),
+             0 4px 12px rgba(60,52,22,.26);
+}
+.brand-mark svg{width:60%;height:60%;fill:none;stroke:#f0e3c2;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.brand-mark svg path:first-child{fill:rgba(240,227,194,.14)}
+
+.brand-text b{
+  display:block;font-family:var(--serif);font-size:20px;font-weight:600;
+  letter-spacing:.03em;line-height:1.05;
+}
+.brand-text i{
+  display:block;font-family:var(--serif);font-style:normal;
+  font-size:12.5px;color:var(--ink-soft);margin-top:2px;
+}
+
+.nav{display:flex;flex-direction:column;gap:1px;margin:24px 0 4px}
+.nav-item{
+  padding:9px 12px;border-radius:7px;text-decoration:none;
+  color:var(--ink-soft);font-size:14.5px;
+  transition:background .18s,color .18s;
+}
+.nav-item:hover{background:rgba(176,71,24,.07);color:var(--terracotta)}
+.nav-item.is-active{
+  color:var(--terracotta);background:rgba(176,71,24,.06);
+  box-shadow:inset 2px 0 0 var(--terracotta);
+}
+
+/* ── compagnons de route ── */
+.companions{margin-top:26px;padding-top:20px;border-top:1px solid var(--rule-soft)}
+.companions h2{
+  font-family:var(--sans);font-size:10.5px;font-weight:600;
+  letter-spacing:.17em;text-transform:uppercase;color:var(--ink-faint);
+  margin-bottom:14px;
+}
+.companions ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+
+.compagnon{
+  padding:10px 11px;border-radius:8px;
+  display:grid;grid-template-columns:1fr auto;gap:2px 10px;
+  background:rgba(255,252,245,.5);
+  border:1px solid transparent;
+  transition:border-color .18s,background .18s;
+}
+.compagnon:hover{background:rgba(255,252,245,.9);border-color:var(--rule-soft)}
+
+.compagnon-label{font-size:13.5px;color:var(--ink);font-weight:500}
+.compagnon-value{text-align:right;font-family:var(--serif);line-height:1}
+.compagnon-value strong{font-size:21px;font-weight:600}
+.compagnon-value small{font-size:11.5px;color:var(--ink-soft);margin-left:3px;font-family:var(--sans)}
+.compagnon-bar{
+  grid-column:1/-1;height:3px;border-radius:2px;margin-top:6px;
+  background:rgba(120,94,56,.16);overflow:hidden;
+}
+.compagnon-bar i{display:block;height:100%;border-radius:inherit;background:var(--olive)}
+.compagnon-goal{grid-column:1/-1;font-size:10.5px;color:var(--ink-faint);margin-top:3px}
+
+.compagnon-activite .compagnon-bar i{background:var(--olive)}
+.compagnon-nutrition .compagnon-bar i{background:var(--sage)}
+.compagnon-sommeil   .compagnon-bar i{background:var(--mineral)}
+.compagnon-journal   .compagnon-bar i{background:var(--ochre)}
+
+.companions-note{
+  font-size:10.5px;line-height:1.5;color:var(--ink-faint);
+  margin-top:12px;padding-left:10px;border-left:1px solid var(--rule);
+}
+
+/* ── état « en attente » : traité, pas subi ──────────────────────────────
+   Une donnée manquante reçoit sa propre matière : hachure fine, encre pâle,
+   contour tireté. Elle se lit comme une case laissée vierge dans un carnet,
+   pas comme un texte gris oublié.
+   ───────────────────────────────────────────────────────────────────────── */
+.pending{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--sans);font-size:11px;font-style:normal;
+  color:var(--ochre);letter-spacing:.02em;white-space:nowrap;
+}
+.pending i{
+  width:16px;height:9px;border-radius:2px;flex:none;
+  border:1px dashed rgba(168,117,44,.6);
+  background:repeating-linear-gradient(45deg,
+    rgba(168,117,44,.16) 0 1.5px,transparent 1.5px 4px);
+}
+.compagnon.is-pending{background:repeating-linear-gradient(45deg,
+    rgba(168,117,44,.05) 0 3px,transparent 3px 8px)}
+.compagnon.is-pending .compagnon-label{color:var(--ink-soft)}
+
+/* ── vignette de bas de colonne ── */
+.rail-foot{margin-top:auto;padding:26px 0 14px;opacity:.62}
+.rail-foot svg{width:100%;height:auto;overflow:visible}
+.rail-foot .wash{fill:rgba(141,127,93,.13);stroke:none}
+.rail-foot .line,.rail-foot .spire,.rail-foot .tree{
+  fill:none;stroke:#7d7458;stroke-width:1.1;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.rail-foot .tree{stroke:var(--olive)}
+
+/* ══ contenu ═════════════════════════════════════════════════════════════ */
+
+main{margin-left:var(--rail-w);padding:38px 40px 40px;max-width:1680px}
+
+/* ── titre-thèse ─────────────────────────────────────────────────────────
+   La phrase signature est le titre. Pas un slogan sous un libellé utilitaire :
+   c'est elle qui porte le sens, donc c'est elle qui occupe l'espace.
+   ───────────────────────────────────────────────────────────────────────── */
+.masthead{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(272px,332px);
+  gap:44px;align-items:end;
+  padding-bottom:28px;margin-bottom:30px;
+  border-bottom:1px solid var(--rule-soft);
+}
+
+.masthead h1{
+  font-size:clamp(38px,5.2vw,72px);
+  line-height:.99;letter-spacing:-.012em;
+  margin:0 0 20px;
+}
+.masthead h1 em{font-style:italic;color:var(--terracotta)}
+
+.standfirst{
+  max-width:60ch;font-family:var(--serif);font-size:18.5px;line-height:1.52;
+  color:#4e4739;
+}
+
+/* compteur */
+.odometer{
+  padding:20px 22px 18px;border-radius:12px;
+  background:linear-gradient(165deg,rgba(255,253,247,.96),rgba(243,234,216,.9));
+  border:1px solid var(--rule);
+  box-shadow:var(--lift);
+}
+.odometer-badge{
+  display:inline-block;margin-bottom:12px;padding:4px 9px;border-radius:99px;
+  font-size:9.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ochre);border:1px solid rgba(168,117,44,.4);
+  background:repeating-linear-gradient(45deg,
+    rgba(168,117,44,.09) 0 3px,transparent 3px 7px);
+}
+.odometer-value{display:flex;align-items:baseline;gap:7px;font-family:var(--serif)}
+.odometer-value strong{font-size:58px;font-weight:500;line-height:.85;color:var(--terracotta)}
+.odometer-value span{font-size:20px;color:var(--ink-soft)}
+.odometer-scale{font-size:12.5px;color:var(--ink-soft);margin-top:7px}
+.odometer-scale b{font-weight:600;color:var(--ink)}
+
+.track{
+  position:relative;height:7px;border-radius:99px;margin:13px 0 11px;
+  background:var(--paper-deep);
+  box-shadow:inset 0 1px 2px rgba(90,66,30,.16);
+  overflow:hidden;
+}
+.track i{
+  display:block;height:100%;width:var(--p,1%);border-radius:99px;
+  background:linear-gradient(90deg,var(--terracotta-deep),#c9591f);
+  box-shadow:0 0 0 1px rgba(138,52,17,.3);
+}
+.odometer-today{font-size:13px;color:var(--ink-soft)}
+.odometer-today strong{font-family:var(--serif);font-size:17px;color:var(--ink)}
+
+/* ── chapitres ── */
+/* scroll-margin : sans elle, un lien de navigation amène le titre du chapitre
+   juste sous le bandeau collant, qui le masque. */
+.chapter{margin-bottom:46px;scroll-margin-top:24px}
+.chapter-head{
+  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.chapter-head h2{font-size:clamp(26px,2.6vw,36px);letter-spacing:-.005em}
+.chapter-head p{font-size:13.5px;color:var(--ink-soft);flex:1;min-width:220px}
+.chapter-head b{color:var(--ink);font-weight:600}
+
+.rail-nav{display:flex;gap:6px}
+.rail-nav button{
+  width:34px;height:34px;border-radius:50%;cursor:pointer;
+  border:1px solid var(--rule);background:rgba(255,252,245,.8);
+  color:var(--ink-soft);font-size:19px;line-height:1;
+  transition:background .18s,color .18s,transform .18s;
+}
+.rail-nav button:hover{background:var(--terracotta);color:#fff8ec;transform:translateY(-1px)}
+
+/* ══ carte ═══════════════════════════════════════════════════════════════ */
+
+.map-and-stage{
+  display:grid;grid-template-columns:minmax(0,2.55fr) minmax(292px,1fr);
+  gap:18px;align-items:stretch;
+}
+
+.map-frame{
+  position:relative;margin:0;border-radius:13px;overflow:hidden;
+  border:1px solid #b6a180;
+  box-shadow:var(--lift-high);
+  min-height:600px;
+  /* Les calques Leaflet montent jusqu'à z-index 760. Sans contexte
+     d'empilement isolé, ils passaient au-dessus du bandeau collant. */
+  isolation:isolate;
+  z-index:0;
+}
+/* liseré intérieur : donne l'épaisseur d'une carte encadrée */
+.map-frame::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:700;
+  border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(94,66,32,.16),
+             inset 0 0 46px rgba(88,60,24,.13);
+}
+
+#camino-map{
+  position:absolute;inset:0;
+  /* la mer : lavis bleu minéral, strié de fines lignes comme une eau gravée */
+  background:
+    repeating-linear-gradient(72deg,rgba(255,255,255,.22) 0 1px,transparent 1px 8px),
+    radial-gradient(ellipse at 38% 26%,#c3d0d6,#a8bcc6 72%);
+}
+#camino-map.is-detailed{background:#ddd8cc}
+
+/* — le fond dessiné —
+   fill-opacity est réaffirmée ici : sans elle, Leaflet délave le sable. */
+.land-body{
+  fill:#ece1c8;fill-opacity:1;
+  stroke:#8a7a5c;stroke-opacity:.9;stroke-linejoin:round;
+}
+/* halo côtier : l'eau pâlit au contact de la terre, comme sur les cartes gravées */
+.land-halo{stroke:#dbe4e6;stroke-opacity:.85;stroke-linejoin:round}
+.relief-mark{stroke:#8d7a58;stroke-opacity:.55;stroke-linecap:round}
+
+/* tuiles OSM, en vue détaillée : adoucies pour rester dans la gamme papier */
+.osm-tiles{filter:sepia(.3) saturate(.72) contrast(.93) brightness(1.05)}
+
+/* — le chemin — */
+.route-remaining{
+  stroke:#9c7b52;stroke-opacity:.75;
+  stroke-dasharray:2 7;stroke-linecap:round;
+}
+.route-walked-halo{stroke:var(--terracotta);stroke-opacity:.15;stroke-linecap:round}
+.route-walked{stroke:var(--terracotta);stroke-linecap:round}
+
+/* — villes — */
+.city{background:none;border:0}
+.city .city-dot{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:7px;height:7px;border-radius:50%;
+  background:var(--paper-high);border:1.5px solid #7d6a4a;
+}
+.city .city-name{
+  position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--serif);font-size:12.5px;font-weight:500;
+  color:#3b342a;
+  /* halo de lisibilité, sans cartouche opaque qui masquerait la carte */
+  text-shadow:0 0 3px var(--paper),0 0 6px var(--paper),0 0 9px rgba(243,236,221,.9);
+}
+.city.label-up   .city-name{bottom:11px}
+.city.label-down .city-name{top:11px}
+.city-rank-1 .city-dot{width:9px;height:9px;border-width:2px;border-color:var(--terracotta-deep)}
+.city-rank-1 .city-name{
+  font-size:14px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+}
+.city.is-reached .city-dot{background:var(--terracotta);border-color:var(--terracotta-deep)}
+.city.is-hidden{opacity:0;pointer-events:none;transition:opacity .2s}
+
+/* — position du pèlerin — */
+.pilgrim{background:none;border:0}
+.pilgrim-dot{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:13px;height:13px;border-radius:50%;
+  background:var(--terracotta);border:2.5px solid var(--paper-high);
+  box-shadow:0 2px 7px rgba(96,44,14,.45);
+}
+.pilgrim-halo{
+  position:absolute;left:50%;top:50%;width:34px;height:34px;
+  margin:-17px 0 0 -17px;border-radius:50%;
+  border:1.5px solid rgba(176,71,24,.42);
+  animation:ping 2.8s ease-out infinite;
+}
+@keyframes ping{
+  0%{transform:scale(.42);opacity:.9}
+  75%,100%{transform:scale(1.25);opacity:0}
+}
+.leaflet-tooltip.pilgrim-tip{
+  background:rgba(252,247,238,.95);border:1px solid var(--rule);
+  border-radius:6px;box-shadow:0 4px 14px rgba(70,46,18,.18);
+  font-family:var(--serif);font-size:12.5px;color:var(--ink);
+  padding:4px 9px;white-space:nowrap;
+}
+.leaflet-tooltip.pilgrim-tip::before{border-top-color:var(--rule)}
+
+/* — outils — */
+.map-tools{
+  position:absolute;top:14px;right:14px;z-index:760;display:flex;gap:6px;
+}
+.map-tools button{
+  padding:8px 12px;border-radius:7px;cursor:pointer;
+  font-family:var(--sans);font-size:11.5px;font-weight:500;
+  color:#4a4235;border:1px solid rgba(112,82,44,.28);
+  background:rgba(251,246,237,.92);
+  box-shadow:0 3px 10px rgba(60,41,20,.13);
+  backdrop-filter:blur(6px);
+  transition:background .18s,color .18s,transform .18s;
+}
+.map-tools button:hover{background:var(--terracotta);color:#fff8ec;transform:translateY(-1px)}
+.map-tools button[aria-pressed="true"]{background:var(--olive);color:#f6f1e2;border-color:var(--olive-deep)}
+
+/* — rose des vents — */
+.rose{
+  position:absolute;right:20px;bottom:54px;width:104px;height:104px;
+  z-index:690;opacity:.5;pointer-events:none;color:#7d6444;
+}
+.rose svg{width:100%;height:100%;overflow:visible}
+.rose circle,.rose path{fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:round}
+.rose .needle{fill:rgba(176,71,24,.3);stroke:var(--terracotta-deep);stroke-width:.9}
+.rose text{
+  fill:currentColor;font-family:var(--serif);font-size:11px;
+  text-anchor:middle;stroke:none;
+}
+
+/* — légende — */
+.map-legend{
+  position:absolute;left:0;right:0;bottom:0;z-index:700;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:9px 16px;
+  background:linear-gradient(transparent,rgba(243,236,221,.94) 42%);
+  font-size:11px;color:var(--ink-soft);
+}
+.key{display:inline-flex;align-items:center;gap:7px}
+.key::before{content:"";width:22px;height:0;border-top-width:2.5px}
+.key-walked::before{border-top-style:solid;border-color:var(--terracotta)}
+.key-left::before{border-top-style:dotted;border-color:#9c7b52}
+.map-credit{margin-left:auto;font-size:9.5px;color:var(--ink-faint)}
+
+.map-fallback{
+  display:grid;place-items:center;height:100%;padding:40px;
+  font-family:var(--serif);font-size:17px;color:var(--ink-soft);text-align:center;
+}
+
+/* ── fiche d'étape ── */
+.stage{
+  display:flex;flex-direction:column;
+  padding:22px 22px 20px;border-radius:13px;
+  border:1px solid var(--rule);
+  background:linear-gradient(170deg,rgba(255,253,247,.95),rgba(243,234,216,.86));
+  box-shadow:var(--lift);
+}
+.stage h3{font-size:clamp(30px,3vw,42px);line-height:1;margin-bottom:6px}
+.stage-region{font-size:12px;color:var(--terracotta);letter-spacing:.04em;margin-bottom:10px}
+.stage-from{font-family:var(--serif);font-size:14.5px;color:var(--ink-soft)}
+.stage-from b{color:var(--ink);font-weight:600}
+.stage-remaining{
+  font-family:var(--serif);font-size:15px;color:var(--ink-soft);
+  padding:11px 0 13px;margin-bottom:2px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.stage-remaining strong{color:var(--terracotta);font-weight:600}
+
+.stage-figure{
+  margin:15px 0 0;flex:1;min-height:186px;border-radius:9px;overflow:hidden;
+  border:1px solid rgba(112,82,44,.22);position:relative;
+  background:var(--paper-deep);
+}
+.stage-figure img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.stage-figure figcaption{
+  position:absolute;left:0;right:0;bottom:0;z-index:1;
+  padding:22px 12px 9px;
+  font-family:var(--serif);font-size:11.5px;color:#fdf8ee;
+  background:linear-gradient(transparent,rgba(48,30,11,.72));
+}
+/* étape non documentée : un dessin d'attente, pas une fausse photo */
+.stage-figure.is-pending{
+  background:repeating-linear-gradient(45deg,
+    rgba(168,117,44,.055) 0 4px,transparent 4px 11px),var(--paper-warm);
+  border-style:dashed;border-color:rgba(168,117,44,.4);
+}
+.figure-pending{display:grid;place-items:center;gap:9px;height:100%;padding:18px;text-align:center}
+.figure-pending svg{width:96px;height:auto;overflow:visible}
+.figure-pending .hill{fill:rgba(135,145,105,.2);stroke:var(--sage);stroke-width:1.1}
+.figure-pending .road{fill:none;stroke:var(--ochre);stroke-width:1.2;stroke-dasharray:3 3;stroke-linecap:round}
+.figure-pending .sun{fill:rgba(168,117,44,.22);stroke:var(--ochre);stroke-width:1}
+.figure-pending p{font-size:11.5px;color:var(--ochre)}
+
+.btn{
+  margin-top:15px;padding:12px 18px;border:0;border-radius:8px;cursor:pointer;
+  font-family:var(--serif);font-size:16px;color:#fff8ec;
+  background:linear-gradient(92deg,var(--terracotta-deep),#bd511e);
+  box-shadow:inset 0 1px rgba(255,255,255,.16),0 6px 16px rgba(122,50,17,.2);
+  transition:transform .18s,box-shadow .18s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:inset 0 1px rgba(255,255,255,.16),0 11px 24px rgba(122,50,17,.28)}
+
+/* ── composition du tracé ─────────────────────────────────────────────────
+   Quatre segments enchaînés, dont un sans équivalent historique. Celui-là est
+   marqué d'une trame et d'une mention « estimé » : la nuance se voit.
+   ───────────────────────────────────────────────────────────────────────── */
+.legs{margin-top:18px}
+.legs h3{
+  font-family:var(--sans);font-size:10.5px;font-weight:600;
+  letter-spacing:.17em;text-transform:uppercase;color:var(--ink-faint);
+  margin-bottom:11px;
+}
+.legs ol{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;
+}
+.leg{
+  padding:13px 15px;border-radius:9px;
+  border:1px solid var(--rule-soft);
+  background:rgba(255,252,245,.55);
+  border-left:3px solid var(--rule);
+}
+.leg-range{
+  display:block;font-size:9.5px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-faint);
+  font-variant-numeric:tabular-nums;
+}
+.leg strong{
+  display:block;font-family:var(--serif);font-size:18px;font-weight:600;
+  margin:2px 0 1px;
+}
+.leg strong em{
+  font-family:var(--sans);font-size:9px;font-weight:600;font-style:normal;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ochre);
+  vertical-align:middle;margin-left:5px;
+  padding:2px 6px;border-radius:99px;border:1px solid rgba(168,117,44,.42);
+}
+.leg-ends{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:6px}
+.leg p{font-size:11.5px;line-height:1.5;color:var(--ink-soft)}
+
+.leg.is-done{border-left-color:var(--terracotta)}
+.leg.is-here{
+  border-left-color:var(--terracotta);
+  background:rgba(255,252,245,.95);
+  box-shadow:var(--lift);
+}
+.leg.is-estimated{
+  border-left-style:dashed;border-left-color:var(--ochre);
+  background:repeating-linear-gradient(45deg,
+    rgba(168,117,44,.04) 0 4px,transparent 4px 11px),rgba(255,252,245,.5);
+}
+
+.sheet-region{
+  font-size:12px;color:var(--terracotta);letter-spacing:.04em;margin-bottom:14px;
+}
+.sheet-body > p:not(.overline):not(.lead):not(.sheet-note):not(.sheet-region){
+  font-family:var(--serif);font-size:16px;line-height:1.65;color:var(--ink-soft);
+  margin-top:16px;
+}
+
+/* ══ crédential — carnet accordéon ═══════════════════════════════════════
+   Un leporello : une bande de papier pliée en accordéon qui se déplie vers la
+   droite. Les plis sont rendus par un dégradé alterné et un trait de rainure,
+   pas par des cartes posées côte à côte.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.leporello{
+  display:flex;gap:0;overflow-x:auto;overflow-y:hidden;
+  padding:2px 0 16px;
+  scroll-snap-type:x proximity;
+  border-radius:11px;
+  /* ombre portée du carnet posé sur la table */
+  filter:drop-shadow(0 16px 30px rgba(72,47,15,.17));
+}
+.leporello::-webkit-scrollbar{height:8px}
+.leporello::-webkit-scrollbar-track{background:rgba(120,94,56,.09);border-radius:99px}
+.leporello::-webkit-scrollbar-thumb{background:rgba(120,94,56,.32);border-radius:99px}
+.leporello:focus-visible{outline:2.5px solid var(--terracotta);outline-offset:4px}
+
+.fold{
+  position:relative;flex:0 0 auto;
+  width:344px;min-height:396px;
+  padding:22px 24px;
+  scroll-snap-align:start;
+  background:
+    /* rainure du pli, sur le bord droit */
+    linear-gradient(90deg,transparent 0 96%,rgba(88,62,28,.14) 97%,rgba(255,255,255,.5) 98%,transparent 99%),
+    repeating-linear-gradient(0deg,rgba(103,73,35,.016) 0 1px,transparent 1px 4px),
+    linear-gradient(103deg,#f7f0e0,#f1e8d3);
+  border-top:1px solid #cbb794;
+  border-bottom:1px solid #cbb794;
+}
+/* alternance : un pli sur deux prend la lumière, l'autre l'ombre */
+.fold:nth-child(even){
+  background:
+    linear-gradient(90deg,transparent 0 96%,rgba(88,62,28,.14) 97%,rgba(255,255,255,.5) 98%,transparent 99%),
+    repeating-linear-gradient(0deg,rgba(103,73,35,.016) 0 1px,transparent 1px 4px),
+    linear-gradient(103deg,#efe5d0,#f5eddd);
+  box-shadow:inset 9px 0 22px -14px rgba(85,58,24,.42);
+}
+.fold:first-child{border-left:1px solid #cbb794;border-radius:9px 0 0 9px}
+.fold:last-child{border-right:1px solid #cbb794;border-radius:0 9px 9px 0}
+
+/* — volet de couverture — */
+.fold-cover,.fold-compostela{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  justify-content:center;gap:3px;
+  color:#efd9ae;
+  background:
+    linear-gradient(90deg,transparent 0 96%,rgba(0,0,0,.3) 97%,rgba(255,255,255,.1) 98%,transparent 99%),
+    repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px),
+    linear-gradient(160deg,#77452c,#5d3421);
+  border-color:#4a2a1a;
+}
+.fold-cover::after,.fold-compostela::after{
+  content:"";position:absolute;inset:14px;pointer-events:none;
+  border:1px solid rgba(239,217,174,.34);
+}
+.fold-emblem{width:56px;height:56px;margin-bottom:12px}
+.fold-emblem svg{width:100%;height:100%;fill:none;stroke:#e8c893;stroke-width:1.2;
+  stroke-linecap:round;stroke-linejoin:round}
+.fold-emblem svg path:first-child{fill:rgba(232,200,147,.13)}
+.fold-cover .fold-overline,.fold-compostela .fold-overline{
+  font-size:9.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(239,217,174,.72);margin-bottom:7px;
+}
+.fold-cover h3,.fold-compostela h3{
+  font-size:27px;font-weight:500;color:#f4e3c2;margin-bottom:15px;
+}
+.fold-id{margin:0 0 15px;display:grid;gap:7px;width:100%;max-width:230px}
+.fold-id div{
+  display:flex;justify-content:space-between;gap:12px;
+  padding-bottom:5px;border-bottom:1px dotted rgba(239,217,174,.3);
+}
+.fold-id dt{font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(239,217,174,.62)}
+.fold-id dd{margin:0;font-family:var(--serif);font-size:13.5px;color:#f2e0bd}
+.fold-note{font-size:11px;line-height:1.5;color:rgba(239,217,174,.72);max-width:250px}
+
+/* sceau de cire de la Compostela */
+.wax{
+  margin-top:16px;width:74px;height:74px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 36% 30%,#a8452c,#7a2c1a 70%);
+  box-shadow:inset 0 -3px 8px rgba(0,0,0,.4),inset 0 2px 5px rgba(255,255,255,.2),
+             0 4px 12px rgba(40,14,6,.45);
+  /* bord irrégulier : de la cire, pas un disque parfait */
+  clip-path:polygon(50% 0,66% 5%,80% 3%,90% 15%,99% 28%,96% 45%,100% 60%,
+    90% 73%,85% 88%,68% 94%,50% 100%,33% 95%,17% 90%,8% 76%,2% 60%,5% 44%,
+    0 28%,11% 16%,20% 4%,35% 6%);
+}
+.wax span{width:52%;height:52%}
+.wax svg{width:100%;height:100%;fill:none;stroke:rgba(255,225,195,.5);stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round}
+.fold-compostela.is-open .wax{
+  background:radial-gradient(circle at 36% 30%,#d4a03e,#9a6a1d 70%);
+}
+
+/* — volets de tampons — */
+.fold-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  padding-bottom:9px;margin-bottom:15px;border-bottom:1px solid #cbb794;
+}
+.fold-head span{
+  font-family:var(--sans);font-size:10px;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--terracotta);
+}
+.fold-head small{
+  font-family:var(--serif);font-size:11.5px;color:var(--ink-faint);
+  text-align:right;line-height:1.25;
+}
+
+.stamp-row{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:13px 10px;
+}
+
+.stamp{display:flex;flex-direction:column;align-items:center;gap:5px}
+
+.stamp-face{
+  position:relative;width:100%;aspect-ratio:1;max-width:88px;
+  display:grid;place-items:center;
+  transform:rotate(var(--tilt,0deg));
+  color:var(--stamp-ink,#4a5f76);
+}
+.stamp-ring{
+  position:absolute;inset:0;
+  border:2px solid currentColor;
+}
+.stamp-ring::after{
+  content:"";position:absolute;inset:4px;border:1px solid currentColor;opacity:.7;
+}
+
+/* Formes de cachet : cinq silhouettes obtenues au rayon de bordure seul.
+   (Une découpe clip-path amputerait la bordure et le liseré intérieur.) */
+.shape-cercle  .stamp-ring,.shape-cercle  .stamp-ring::after{border-radius:50%}
+.shape-ovale   .stamp-ring,.shape-ovale   .stamp-ring::after{border-radius:50%/36%}
+.shape-ecusson .stamp-ring,.shape-ecusson .stamp-ring::after{border-radius:44% 44% 40% 40%/30% 30% 64% 64%}
+.shape-tonneau .stamp-ring,.shape-tonneau .stamp-ring::after{border-radius:26%/50%}
+.shape-carre   .stamp-ring,.shape-carre   .stamp-ring::after{border-radius:5px}
+
+/* encres */
+.ink-indigo{--stamp-ink:#3f5b7d}
+.ink-rouge {--stamp-ink:#a03a33}
+.ink-vert  {--stamp-ink:#4c7359}
+.ink-violet{--stamp-ink:#65558a}
+.ink-sepia {--stamp-ink:#8a6437}
+.ink-ocre  {--stamp-ink:#a8752c}
+/* Encre réservée au tampon de départ, Rome : brique romaine, distincte des
+   six encres qui se partagent les tampons ordinaires du chemin. */
+.ink-romano{--stamp-ink:#9a3324}
+
+/* Contenu du cachet : colonne centrée dans un cadre borné, pour que les noms
+   longs (Villafranca del Bierzo, Campagnano di Roma) se plient sur deux lignes
+   au lieu de déborder du cercle. */
+.stamp-face > :not(.stamp-ring){position:relative;z-index:2}
+.stamp-face{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;padding:19% 15%;text-align:center;
+}
+.stamp-place{
+  font-family:var(--sans);font-size:6px;font-weight:600;
+  letter-spacing:.02em;text-transform:uppercase;line-height:1.08;
+  /* deux lignes au maximum, le reste est coupé proprement */
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;max-width:100%;overflow-wrap:anywhere;hyphens:auto;
+}
+.stamp-km{
+  font-family:var(--sans);font-size:6px;font-weight:600;letter-spacing:.04em;
+  white-space:nowrap;
+}
+.stamp-shell{width:30%;flex:none;aspect-ratio:40/38;margin:1px 0}
+.stamp-shell svg{width:100%;height:100%;fill:none;stroke:currentColor;
+  stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+.stamp-status{font-size:8.5px;color:var(--ink-faint);text-align:center;line-height:1.2}
+
+/* tampon obtenu : encre franche, légèrement irrégulière comme un vrai coup de tampon */
+.stamp.is-earned .stamp-face{opacity:.92}
+.stamp.is-earned .stamp-status{color:var(--stamp-ink);font-weight:600}
+
+/* tampon à venir : gaufrage à sec. Pas d'encre, mais un relief — l'emplacement
+   existe déjà dans le carnet, il attend son cachet. */
+.stamp.is-locked .stamp-face{
+  color:#c3b291;opacity:.85;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.85));
+}
+.stamp.is-locked .stamp-place,
+.stamp.is-locked .stamp-km{color:#b0a084}
+
+/* Tampon en cours : l'encre monte par le bas à mesure des kilomètres, comme
+   un tampon que l'on presse peu à peu. Un remplissage circulaire donnait une
+   part de camembert, illisible comme indicateur. */
+.stamp.is-current .stamp-face{color:var(--terracotta);opacity:1}
+.stamp.is-current .stamp-ring{
+  border-color:var(--terracotta);
+  background:linear-gradient(to top,
+    rgba(176,71,24,.19) 0 var(--fill,0%),
+    transparent var(--fill,0%) 100%);
+}
+.stamp.is-current .stamp-status{color:var(--terracotta);font-weight:600}
+
+.leporello-hint{
+  font-size:11px;color:var(--ink-faint);margin-top:9px;text-align:center;
+}
+
+/* ══ journal — comparateur ═══════════════════════════════════════════════ */
+
+.compare-host{
+  border-radius:12px;border:1px solid var(--rule);
+  background:linear-gradient(170deg,rgba(255,253,247,.9),rgba(243,234,216,.8));
+  padding:22px;box-shadow:var(--lift);
+}
+.compare-host.is-pending{
+  border-style:dashed;border-color:rgba(168,117,44,.42);
+  background:repeating-linear-gradient(45deg,
+    rgba(168,117,44,.04) 0 5px,transparent 5px 13px),var(--paper-warm);
+}
+.compare-pending{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.compare-pending svg{width:158px;height:auto;flex:none}
+.compare-pending .frame{fill:rgba(255,255,255,.4);stroke:var(--ochre);
+  stroke-width:1.2;stroke-dasharray:4 3}
+.compare-pending .mark{fill:none;stroke:var(--sage);stroke-width:1.4;stroke-linecap:round}
+.compare-pending .arrow{fill:none;stroke:var(--terracotta);stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.compare-pending strong{
+  display:block;font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:5px;
+}
+.compare-pending p{font-size:13.5px;color:var(--ink-soft);max-width:56ch;line-height:1.55}
+
+.compare{position:relative;border-radius:9px;overflow:hidden;aspect-ratio:16/9}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.compare-after-wrap{position:absolute;inset:0;overflow:hidden;width:var(--split,50%)}
+.compare-after-wrap img{width:100vw;max-width:none}
+.compare input{
+  position:absolute;inset:auto 0 0;width:100%;z-index:3;margin:0;
+  opacity:0;height:100%;cursor:ew-resize;
+}
+.compare-handle{
+  position:absolute;top:0;bottom:0;left:var(--split,50%);width:2px;z-index:2;
+  background:var(--paper-high);box-shadow:0 0 10px rgba(0,0,0,.4);
+  pointer-events:none;
+}
+
+/* ══ pied ════════════════════════════════════════════════════════════════ */
+
+.foot{
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  padding-top:18px;border-top:1px solid var(--rule-soft);
+  font-size:11px;color:var(--ink-faint);
+}
+.foot b{color:var(--ink-soft);font-weight:600}
+
+/* ══ fenêtre ═════════════════════════════════════════════════════════════ */
+
+.sheet{
+  width:min(640px,calc(100vw - 28px));padding:0;border:1px solid var(--rule);
+  border-radius:14px;color:var(--ink);background:var(--paper);
+  box-shadow:0 30px 90px rgba(52,34,13,.34);
+}
+.sheet::backdrop{background:rgba(42,35,25,.6);backdrop-filter:blur(4px)}
+.sheet-body{padding:34px 34px 30px}
+.sheet-body h2{font-size:clamp(30px,4vw,44px);margin-bottom:16px}
+.sheet .lead{font-family:var(--serif);font-size:18px;line-height:1.55;color:#4b4437}
+.sheet blockquote{
+  margin:22px 0 0;padding-left:18px;border-left:2px solid var(--terracotta);
+  font-family:var(--serif);font-style:italic;font-size:17px;color:var(--terracotta-deep);
+}
+.sheet-note{
+  margin-top:22px;padding:12px 14px;border-radius:8px;font-size:12px;
+  color:var(--ochre);line-height:1.5;
+  border:1px dashed rgba(168,117,44,.42);
+  background:repeating-linear-gradient(45deg,rgba(168,117,44,.05) 0 4px,transparent 4px 10px);
+}
+.sheet-close{
+  position:absolute;top:12px;right:14px;width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--rule);background:rgba(255,252,245,.9);
+  color:var(--ink-soft);font-size:23px;line-height:1;
+}
+.sheet-close:hover{background:var(--terracotta);color:#fff8ec}
+
+/* ══ adaptation ══════════════════════════════════════════════════════════ */
+
+@media (max-width:1240px){
+  :root{--rail-w:224px}
+  main{padding:32px 26px 34px}
+  .masthead{grid-template-columns:1fr;gap:26px;align-items:start}
+  .map-and-stage{grid-template-columns:minmax(0,1.9fr) minmax(268px,1fr)}
+}
+
+@media (max-width:980px){
+  .rail{
+    position:sticky;inset:0 auto auto 0;width:100%;height:auto;
+    flex-direction:row;align-items:center;gap:16px;
+    padding:10px 16px;border-right:0;border-bottom:1px solid var(--rule-soft);
+    overflow:visible;
+  }
+  .brand-text i{display:none}         /* le sous-titre étranglait le bandeau */
+  .brand-mark{flex-basis:40px;height:40px}
+  .brand-text b{font-size:17px}
+  .nav{flex-direction:row;margin:0 0 0 auto;gap:2px}
+  .nav-item{padding:7px 11px;font-size:13px}
+  .nav-item.is-active{box-shadow:inset 0 -2px 0 var(--terracotta)}
+  .companions,.rail-foot{display:none}
+  main{margin-left:0;padding:24px 18px 30px}
+  .chapter{scroll-margin-top:74px}   /* hauteur du bandeau collant */
+  .map-and-stage{grid-template-columns:1fr}
+  .map-frame{min-height:460px}
+}
+
+@media (max-width:640px){
+  body{font-size:15px}
+  main{padding:20px 14px 26px}
+  .masthead h1{font-size:clamp(31px,8.5vw,44px)}
+  .standfirst{font-size:16px}
+  .odometer{padding:16px 17px 15px}
+  .odometer-value strong{font-size:46px}
+  .map-frame{min-height:390px}
+  .map-tools{top:10px;right:10px;flex-wrap:wrap;max-width:calc(100% - 20px);justify-content:flex-end}
+  .map-tools button{padding:7px 9px;font-size:10.5px}
+  .rose{width:74px;height:74px;right:12px;bottom:48px;opacity:.4}
+  .fold{width:min(298px,86vw);min-height:372px;padding:18px 18px}
+  .stamp-row{gap:11px 8px}
+  .compare-pending{gap:16px}
+  .compare-pending svg{width:124px}
+  .sheet-body{padding:26px 20px 24px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;scroll-behavior:auto !important;
+  }
+}

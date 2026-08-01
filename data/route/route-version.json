@@ -1,0 +1,16 @@
+{
+  "schema": "camino-virtuel/route-version@1",
+  "current": {
+    "version": "1.0.0",
+    "created_at": "2026-07-31T13:58:26.416Z",
+    "label": "Tracé maître initial",
+    "description": "Premier tracé validé : 7 relations OSM assemblées, jonctions vérifiées manuellement (voir sources.md), distance calculée sur la géométrie réelle. Remplace la valeur provisoire de 2 890 km.",
+    "source_gpx": "data/gpx/master-route.gpx",
+    "source_gpx_sha256": "38f2c77ad5eca36649bdfd3333804d237242b53fe6a8d0dc2e1f126c8b8c47af",
+    "total_km": 2796.42,
+    "point_count": 131042,
+    "previous_total_km_provisional": 2890,
+    "segments": 7
+  },
+  "history": []
+}

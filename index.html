@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3ecdd">
+<title>Camino Virtuel — Rome → Santiago</title>
+<meta name="description" content="Je marche réellement autour de chez moi. Chaque kilomètre me fait avancer virtuellement de Rome à Santiago de Compostela.">
+<link rel="stylesheet" href="assets/js/vendor/leaflet.css">
+<link rel="stylesheet" href="assets/css/camino.css">
+</head>
+<body>
+
+<a class="skip" href="#carte">Aller à la carte</a>
+
+<!-- ══ colonne de gauche ═══════════════════════════════════════════════════ -->
+<aside class="rail">
+  <a class="brand" href="#top">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 38">
+        <path d="M3.5 27.6Q3.1 23.9 7.1 22.5Q7.3 18.3 11.5 18.4Q13.2 14.6 17 16.3Q20 13.3 23 16.3Q26.8 14.6 28.5 18.4Q32.7 18.3 32.9 22.5Q36.9 23.9 36.5 27.6Q30 31 23.4 33.5L22.6 36.4L17.4 36.4L16.6 33.5Q10 31 3.5 27.6Z"/>
+        <path d="M20 33L8.4 23.4M20 33L12.3 19.8M20 33L17.3 17.9M20 33L22.7 17.9M20 33L27.7 19.8M20 33L31.6 23.4M20 33L20 16.9"/>
+      </svg>
+    </span>
+    <span class="brand-text">
+      <b>Camino Virtuel</b>
+      <i>Rome → Santiago</i>
+    </span>
+  </a>
+
+  <nav class="nav" aria-label="Navigation principale">
+    <a class="nav-item is-active" href="#carte">Le chemin</a>
+    <a class="nav-item" href="#credential">Le crédential</a>
+    <a class="nav-item" href="#transformation">La transformation</a>
+  </nav>
+
+  <!-- Les données personnelles de Julien vivent ici, dans la colonne — jamais
+       sous la carte. « Compagnons de route » est réservé à la future
+       communauté qui suit l'aventure (Bible, ch. 1, §6.3) : ce nom ne doit
+       plus être réutilisé pour cette section. -->
+  <section class="companions" aria-labelledby="daily-title">
+    <h2 id="daily-title">Mon quotidien</h2>
+    <ul data-daily></ul>
+    <p class="companions-note" data-demo-only>
+      Ces relevés se connecteront aux exports Santé. Rien n’est estimé :
+      une mesure absente reste absente.
+    </p>
+  </section>
+
+  <div class="rail-foot" aria-hidden="true">
+    <svg viewBox="0 0 200 120">
+      <path class="wash" d="M0 96c26-30 44-44 66-38 20 5 26-22 48-25 30-4 42 22 66 20 8 0 16 4 20 12v55H0Z"/>
+      <path class="line" d="M4 92 38 62l20 16 34-42 26 28 20-16 54 44"/>
+      <path class="line" d="M14 100h172"/>
+      <path class="spire" d="M150 100V56m-6 8h12m-6-8-5-10 5-9 5 9-5 10"/>
+      <path class="tree" d="M42 100V56m0 6-11 21 11-8 11 8-11-21"/>
+    </svg>
+  </div>
+</aside>
+
+<!-- ══ contenu ═════════════════════════════════════════════════════════════ -->
+<main id="top">
+
+  <!-- ── titre-thèse ─────────────────────────────────────────────────────── -->
+  <header class="masthead">
+    <div class="masthead-text">
+      <p class="overline">Le pèlerinage continue, autrement</p>
+      <h1>Mes pas sont réels.<br><em>Le voyage est virtuel.</em></h1>
+      <p class="standfirst">
+        Cette année, je ne peux pas partir sur les chemins de Compostelle comme
+        d’habitude. Alors je marche, sac au dos, autour de chez moi : chaque
+        kilomètre réel me fait avancer virtuellement de Rome à Santiago.
+      </p>
+    </div>
+
+    <div class="odometer">
+      <span class="odometer-badge" data-demo-only>Données de démonstration</span>
+      <p class="odometer-value">
+        <strong data-km-total>—</strong><span>km</span>
+      </p>
+      <p class="odometer-scale">sur <b data-km-goal>2 796</b> — <b data-percent>0</b> %</p>
+      <div class="track" data-progress-bar role="progressbar"
+           aria-valuemin="0" aria-valuemax="2796.42" aria-valuenow="0">
+        <i></i>
+      </div>
+      <p class="odometer-today" data-today></p>
+    </div>
+  </header>
+
+  <!-- ── la carte, cœur du site ──────────────────────────────────────────── -->
+  <section class="chapter" id="carte" aria-labelledby="carte-title">
+    <div class="chapter-head">
+      <h2 id="carte-title">Le chemin</h2>
+      <p>Rome → Santiago de Compostela, 2 796,42 km selon la géométrie réelle du tracé.</p>
+    </div>
+
+    <div class="map-and-stage">
+      <figure class="map-frame">
+        <div id="camino-map" role="application"
+             aria-label="Carte du Camino Virtuel, de Rome à Santiago. Zoomable et déplaçable."></div>
+
+        <div class="map-tools">
+          <button type="button" data-map-all>Tout le chemin</button>
+          <button type="button" data-map-here>Ma position</button>
+          <button type="button" data-map-detail aria-pressed="false"><span>Vue détaillée</span></button>
+        </div>
+
+        <div class="rose" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="35"/>
+            <path d="M50 2v14M50 84v14M2 50h14M84 50h14"/>
+            <path class="needle" d="M50 12 55 47 50 88 45 47Z"/>
+            <text x="50" y="9">N</text>
+          </svg>
+        </div>
+
+        <figcaption class="map-legend">
+          <span class="key key-walked">parcouru</span>
+          <span class="key key-left">reste à parcourir</span>
+          <span class="map-credit" data-map-credit hidden>fond de plan © OpenStreetMap</span>
+        </figcaption>
+      </figure>
+
+      <article class="stage">
+        <p class="overline">L’étape virtuelle</p>
+        <h3><span data-stage-name>—</span></h3>
+        <p class="stage-region" data-stage-region></p>
+        <p class="stage-from">après <b data-stage-from>—</b></p>
+        <p class="stage-remaining" data-stage-remaining></p>
+
+        <figure class="stage-figure" data-stage-figure></figure>
+
+        <button class="btn" type="button" data-open="dlg-stage">Découvrir l’étape</button>
+      </article>
+    </div>
+
+    <!-- Il n'existe pas de « chemin officiel Rome → Santiago ». Le tracé
+         enchaîne trois itinéraires réels et un maillon estimé : autant le dire. -->
+    <section class="legs" aria-labelledby="legs-title">
+      <h3 id="legs-title">Un tracé composé</h3>
+      <ol data-legs></ol>
+    </section>
+  </section>
+
+  <!-- ── le crédential, second protagoniste ──────────────────────────────── -->
+  <section class="chapter" id="credential" aria-labelledby="cred-title">
+    <div class="chapter-head">
+      <h2 id="cred-title">Le crédential</h2>
+      <p>
+        <b data-stamp-label>—</b> — les prochains lieux se révèlent au fil du chemin.
+      </p>
+      <div class="rail-nav">
+        <button type="button" data-accordion-prev aria-label="Volet précédent">‹</button>
+        <button type="button" data-accordion-next aria-label="Volet suivant">›</button>
+      </div>
+    </div>
+
+    <div class="leporello" data-accordion tabindex="0"
+         aria-label="Carnet du pèlerin, déplié — faire défiler horizontalement"></div>
+
+    <p class="leporello-hint">
+      Le carnet se déplie vers la droite : faire défiler, ou utiliser les flèches ci-dessus.
+    </p>
+  </section>
+
+  <!-- ── transformation ──────────────────────────────────────────────────────
+       Distincte, techniquement, du futur journal quotidien et du futur carnet
+       de la communauté (Bible, ch. 1, §13 et §15) : ces deux composants
+       restent à construire, une fois cadrés. Cette section ne contient que le
+       comparateur visuel — c'est tout ce qu'elle est aujourd'hui. -->
+  <section class="chapter" id="transformation" aria-labelledby="transformation-title">
+    <div class="chapter-head">
+      <h2 id="transformation-title">La transformation</h2>
+      <p>Ce que le chemin fait au corps, consigné dans la durée.</p>
+    </div>
+    <div class="compare-host" data-compare></div>
+  </section>
+
+  <footer class="foot">
+    <p><b>Camino Virtuel</b> — Rome → Santiago, 2 796,42 km selon la géométrie réelle du tracé.</p>
+    <p data-demo-only>Toutes les valeurs affichées sont des données de démonstration.</p>
+  </footer>
+</main>
+
+<!-- ══ fenêtre : l'étape ═══════════════════════════════════════════════════ -->
+<dialog id="dlg-stage" class="sheet">
+  <button class="sheet-close" type="button" data-close aria-label="Fermer">×</button>
+  <div class="sheet-body" data-sheet-body></div>
+</dialog>
+
+<script src="assets/js/vendor/leaflet.js"></script>
+<script src="assets/data/europe-geo.js"></script>
+<script src="assets/data/camino-data.js"></script>
+<script src="assets/data/camino-state.js"></script>
+<script src="assets/js/camino-map.js"></script>
+<script src="assets/js/camino.js"></script>
+</body>
+</html>
