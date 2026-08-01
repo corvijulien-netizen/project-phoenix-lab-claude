@@ -16,6 +16,10 @@ histoire.
 > Ce document prime sur ce README en cas de désaccord. Toute décision
 > technique, éditoriale ou graphique doit rester cohérente avec lui.
 
+**Documentation et gouvernance :** voir [`docs/`](docs/) — la Bible, la charte
+du projet ([`docs/CHARTER.md`](docs/CHARTER.md)), les décisions d'architecture
+([`docs/adr/`](docs/adr/)) et le reste de la mémoire écrite du projet.
+
 ---
 
 ## Ouvrir le site
