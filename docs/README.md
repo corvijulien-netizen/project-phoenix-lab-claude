@@ -1,5 +1,10 @@
 # Documentation — Camino Virtuel
 
+> ## 🛑 STATUT DU PROJET : EN PAUSE DEPUIS LE 1ER AOÛT 2026
+>
+> Voir [`decisions/2026-08-01-pause-camino-virtuel.md`](decisions/2026-08-01-pause-camino-virtuel.md)
+> pour l'état complet du projet, ce qui est validé, et le point de reprise.
+
 Ce dossier est la mémoire écrite du projet : la vision, la manière de
 travailler, et les décisions techniques qui ne doivent pas rester uniquement
 dans l'historique d'une conversation.
