@@ -1,5 +1,12 @@
 # Camino Virtuel
 
+> ## 🛑 STATUT DU PROJET : EN PAUSE DEPUIS LE 1ER AOÛT 2026
+>
+> Le projet est mis en pause, non abandonné — aucune donnée ni aucun fichier
+> n'a été supprimé. Priorité redonnée à Project Phoenix. Le détail complet
+> (ce qui est validé, ce qui reste ouvert, le point de reprise recommandé) :
+> **[`docs/decisions/2026-08-01-pause-camino-virtuel.md`](docs/decisions/2026-08-01-pause-camino-virtuel.md)**.
+
 > Mes pas sont réels. Le voyage est virtuel.
 
 Julien marche réellement, sac au dos, autour de chez lui. Chaque kilomètre
