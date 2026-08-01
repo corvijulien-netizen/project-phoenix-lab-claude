@@ -126,6 +126,7 @@ ne pas perdre avant de reprendre :
 docs/
 ├── CHARTER.md                                 gouvernance, rôles, règles de fusion
 ├── README.md                                  index de toute la documentation
+├── PROJECT-IDENTITY.md                        identité de ce dépôt vs Project Phoenix — Transformation
 ├── bible/
 │   └── chapitre-1-vision.md                   vision produit, non découpée
 ├── adr/
@@ -142,7 +143,8 @@ docs/
 │   └── assets/{icons,colors,typography,textures,sounds,photos}/, ui/, animations/  (vides)
 └── lab/
     ├── README.md
-    └── concepts/, explorations/, archives/     (vides)
+    └── concepts/menu-v1/README.md             menu à six rubriques, concept sans fichier image
+    └── explorations/, archives/                (vides)
 ```
 
 ## Décisions concernant la route, la distance réelle, les lieux et les tampons
@@ -194,21 +196,49 @@ existant n'a été copié.
 
 ## Menu à six rubriques et iconographie étudiée
 
-**Ce point n'a pas de trace dans cette session.** Aucun menu à six rubriques
-ni iconographie associée n'a été discuté ou produit dans le cadre du travail
-mené ici avec Claude Code. Si cette réflexion existe, elle a été menée dans
-la conversation de conception parallèle (avec ChatGPT ou avec Claude en tant
-que coordinateur technique) et n'a pas encore été transcrite dans ce dépôt.
+**Décision officielle transmise par Julien le 1er août 2026** (hors de
+cette session de travail, mais transcrite ici sur son instruction explicite
+— voir aussi `docs/lab/concepts/menu-v1/README.md`).
 
-À défaut de cette matière, ce document ne peut pas la restituer sans
-l'inventer — ce qui contredirait la règle du projet de ne jamais combler un
-vide par une supposition plausible. **À récupérer et à documenter (dans
-`docs/roadmap/` ou `docs/decisions/`) avant toute reprise du chantier menu.**
+Le menu principal conceptuel comprenait six rubriques :
 
-La seule trace connexe dans la Bible (§16, « Architecture du menu ») liste
-neuf pistes non tranchées — chemin, voyage intérieur, nutrition, sommeil,
-transformation, héritage, journal, crédentiale, communauté — explicitement
-comme non décidées, pas comme un menu à six rubriques arrêté.
+1. **Le Voyage** — icône : borne kilométrique avec coquille et flèche
+   jaune. Fonction envisagée : carte, progression, kilomètres, villes et
+   événements.
+2. **Le Crédential** — icône : crédential fermé. Fonction envisagée :
+   crédential virtuel, tampons, villes et souvenirs.
+3. **Carnet de Route** — icône : carnet ouvert avec croquis et stylo.
+   Fonction envisagée : journal, photos, vidéos, pensées et transformation.
+4. **Le Dortoir** — icône : lit superposé d'albergue. Fonction envisagée :
+   sommeil, récupération, fréquence cardiaque et données de la montre.
+5. **Le Menu du Pèlerin** — icône : ardoise de restaurant « Menu del
+   Peregrino ». Fonction envisagée : nutrition, recettes, poids et
+   objectif 80 kg.
+6. **Le Sac du Pèlerin** — icône : sac de randonnée avec coquille. Fonction
+   envisagée : équipement, applications, IA et coulisses du projet.
+
+Les paramètres étaient représentés par une boussole, séparée des six
+rubriques principales et placée discrètement en bas de la navigation.
+
+### Statut de cette décision
+
+- Architecture conceptuelle étudiée et retenue comme direction.
+- Planche visuelle produite (par Julien, hors de cet environnement de
+  session — non enregistrée dans ce dépôt, voir
+  `docs/lab/concepts/menu-v1/README.md` pour le détail).
+- Aucun composant final vectoriel produit.
+- Aucune intégration dans le site.
+- Aucune validation technique ou responsive.
+- Les illustrations ne doivent pas être placées dans le Design System comme
+  assets de production — elles restent dans le Lab
+  (`docs/lab/concepts/menu-v1/`) tant qu'elles ne sont pas vectorisées et
+  validées.
+
+La seule trace connexe précédemment identifiée dans la Bible (§16,
+« Architecture du menu ») listait neuf pistes non tranchées — chemin,
+voyage intérieur, nutrition, sommeil, transformation, héritage, journal,
+crédentiale, communauté. Ce menu à six rubriques est la décision qui en
+découle, transcrite ici pour la première fois dans ce dépôt.
 
 ## Concepts communautaires et futurs
 
@@ -231,8 +261,10 @@ Décrits dans la Bible, aucun n'est construit :
 - Découpage de la Bible en chapitres (mis en attente, pas annulé).
 - Chapitre 2 de la Bible (« Expérience quotidienne »), annoncé mais jamais
   écrit.
-- Menu à six rubriques et iconographie (voir plus haut — contenu introuvable
-  dans cette session).
+- Vectorisation, simplification et intégration technique du menu à six
+  rubriques (concept validé comme direction, voir plus haut et
+  `docs/lab/concepts/menu-v1/`) — reste non vectorisé, non testé en petite
+  taille, non intégré.
 - Comptes visiteurs, tampons communautaires, moments secrets.
 - Jumeau numérique évolutif.
 - Knowledge Graph complet.
@@ -250,8 +282,9 @@ Décrits dans la Bible, aucun n'est construit :
    obsolète d'ici la reprise).
 3. Committer les scripts de pipeline géométrique et de build du fichier
    autonome, aujourd'hui absents du dépôt.
-4. Récupérer le contenu du menu à six rubriques et de l'iconographie
-   étudiée, s'il existe, auprès de la conversation de conception parallèle.
+4. Vectoriser et tester en petite taille les six icônes du menu (concept
+   documenté dans `docs/lab/concepts/menu-v1/`), avant toute migration vers
+   le Design System.
 5. Reprendre la rédaction des ADR-001 à 003 une fois leur contenu fourni.
 6. Relire ce document dans son intégralité avant de coder quoi que ce soit :
    il est plus rapide à lire que l'historique complet des conversations.
@@ -264,3 +297,9 @@ coquille et le ton éditorial ont été pensés spécifiquement pour l'univers d
 pèlerinage de Compostelle. Project Phoenix mérite sa propre identité
 visuelle, déterminée pour son propre objet — la transformation physique de
 Julien — pas héritée par défaut d'un projet mis en pause.
+
+Voir `docs/PROJECT-IDENTITY.md` : Project Phoenix — Transformation
+(`PROJECT_ID: PHX-CORE`) est un projet distinct de Camino Virtuel
+(`PROJECT_ID: CV-ARCHIVE`, ce dépôt), hébergé dans un autre dépôt
+(`corvijulien-netizen/project-phoenix`) — ce n'est pas une autre section de
+ce dépôt-ci, malgré le nom historique de celui-ci.
