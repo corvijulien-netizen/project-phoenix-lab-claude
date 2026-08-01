@@ -42,8 +42,11 @@ Séparer deux entités dans `assets/data/camino-data.js` :
   recalculé à chaque appel de `getStamps(km)` à partir de la progression réelle.
 
 `getStamps(km)` ne renvoie que les tampons dont `routeDistanceKm` est atteint.
-Un tampon futur n'est donc pas filtré ou masqué en aval par l'interface : il
-n'existe pour aucune partie du programme tant qu'il n'est pas atteint.
+Un tampon futur reste présent dans la source de données, mais il n'est jamais
+exposé aux composants de l'interface tant qu'il n'est pas atteint.
+
+Le statut `revealed` est réservé comme point d'extension technique ; son usage
+fonctionnel n'est pas encore validé.
 
 ## Conséquences
 
