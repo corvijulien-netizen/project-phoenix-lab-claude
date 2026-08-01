@@ -1,6 +1,7 @@
 # Logo officiel — Camino Virtuel
 
-**Statut :** ✅ Validé
+**Statut :** ✅ Validé conceptuellement — le nom et la version sont arrêtés ;
+les fichiers graphiques n'existent pas encore.
 
 **Nom :** Tampon Camino Virtuel
 
@@ -8,8 +9,6 @@
 
 **Description :** Logo officiel inspiré d'un tampon de crédential de pèlerin.
 
----
-
-Les fichiers du logo (SVG, PNG, favicon) seront ajoutés ici ultérieurement.
-Ce README n'est, pour l'instant, qu'une fiche de statut — aucun fichier de
-logo n'est généré dans cette PR.
+**Fichiers associés :** aucun pour l'instant. SVG, PNG et favicon seront
+ajoutés ici ultérieurement — ce README n'est, pour le moment, qu'une fiche de
+statut. Aucun fichier de logo n'est généré dans cette PR.

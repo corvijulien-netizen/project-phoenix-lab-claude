@@ -1,8 +1,24 @@
 # Design System — Camino Virtuel
 
-Ce dossier contient les ressources visuelles et sonores **validées** du projet :
-logo, icônes, couleurs, typographie, textures, sons, photos, motifs d'interface
-et animations.
+Le Design System est la **source unique de vérité** pour tous les assets
+validés du projet : logo, couleurs, icônes, sons, textures, typographie,
+photos, animations et composants d'interface. **C'est la seule référence que
+Claude Code utilise** pour tout développement ou intégration touchant à
+l'apparence du site.
+
+Le Lab (`docs/lab/`) reste, à l'inverse, un espace de recherche et
+d'exploration — rien de ce qui s'y trouve n'est utilisable directement sur le
+site.
+
+## Le workflow officiel
+
+```
+Lab → Validation → Design System → Intégration sur le site
+```
+
+Une ressource naît dans le Lab, sous forme d'exploration libre. Elle ne
+rejoint le Design System qu'après validation explicite — c'est ce passage qui
+la rend utilisable par Claude Code pour une intégration réelle sur le site.
 
 ## Règles
 
@@ -17,6 +33,18 @@ et animations.
   distingué de l'original.
 - **Une ressource non validée reste dans le Lab** (`docs/lab/`). Elle n'entre
   ici qu'après validation explicite.
+
+## Gabarit d'une ressource validée
+
+Chaque ressource validée — quelle que soit sa catégorie — documente au minimum :
+
+- **un numéro de version** ;
+- **un statut** (validé conceptuellement, validé avec fichiers, etc.) ;
+- **une courte description** ;
+- **les fichiers associés**, lorsqu'ils existent (SVG, PNG, WAV, etc.) — et
+  leur absence assumée quand ce n'est pas encore le cas, plutôt que silencieuse.
+
+Voir `assets/logo/README.md` pour un exemple concret de ce gabarit appliqué.
 
 ## Structure
 
